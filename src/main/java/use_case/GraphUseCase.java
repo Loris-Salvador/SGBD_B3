@@ -1,5 +1,6 @@
 package use_case;
 
+import exception.DataBaseException;
 import javafx.scene.chart.XYChart;
 import model.DataCar;
 import model.DataSet;
@@ -18,7 +19,7 @@ public class GraphUseCase {
          this.repo = repo;
     }
 
-    public DataSet getDataSet(int timeStamp) throws IOException {
+    public DataSet getDataSet(int timeStamp) throws IOException, DataBaseException {
 
         ArrayList<DataCar> dataCar = repo.getDataFromTimeStamp(timeStamp);
 

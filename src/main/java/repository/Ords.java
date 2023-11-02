@@ -2,6 +2,7 @@ package repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exception.DataBaseException;
 import model.DataCar;
 
 import java.io.BufferedReader;
@@ -17,7 +18,7 @@ public class Ords {
 
     }
 
-    public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws IOException {
+    public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws IOException, DataBaseException {
 
         int timestamp2 = timeStamp - 60;
         String reponse = executeRequest("http://192.168.203.140:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
@@ -32,6 +33,11 @@ public class Ords {
         {
             DataCar dataCar = new DataCar(node);
             list.add(dataCar);
+        }
+
+        if(list.isEmpty() || list.getLast().getTimeStamp() != timeStamp)
+        {
+            throw new DataBaseException("TimeStamp inexistant");
         }
 
         return list;

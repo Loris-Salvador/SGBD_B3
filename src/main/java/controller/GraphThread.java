@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.scene.chart.NumberAxis;
 
 public class GraphThread extends Thread {
@@ -25,6 +26,10 @@ public class GraphThread extends Thread {
                 return;
             }
         }
+        Platform.runLater(() -> {
+            controller.defilementTermine();
+        });
+
     }
 
 }

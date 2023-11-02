@@ -1,11 +1,13 @@
 package controller;
 
+import exception.DataBaseException;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.DataSet;
 import use_case.GraphUseCase;
@@ -16,6 +18,8 @@ import java.util.List;
 
 
 public class MainController {
+    @FXML
+    private Label problemLabel;
     @FXML
     private LineChart linearGraph;
     @FXML
@@ -49,7 +53,6 @@ public class MainController {
     public MainController(GraphUseCase graphUseCase)
     {
         this.graphUseCase = graphUseCase;
-
     }
     @FXML
     public void initialize() {
@@ -87,24 +90,42 @@ public class MainController {
 
             timeStamp = Integer.parseInt(timeStampTextField.getText());
             currentStamp = timeStamp -60;
-
             NumberAxis xAxis = (NumberAxis) linearGraph.getXAxis();
             xAxis.setAutoRanging(false);
             xAxis.setTickUnit(1);
             xAxis.setLowerBound(currentStamp-1);
             xAxis.setUpperBound(currentStamp+10);
-
-
             setCheckBoxesVisibility(true);
+
+
+            if(problemLabel.isVisible())
+            {
+                problemLabel.setVisible(false);
+            }
+            demarrerButton.setText("Demarrer");
+            demarrerButton.setVisible(true);
+            pauseButton.setVisible(false);
         }
-        catch (IOException e)
+        catch (DataBaseException | IOException e)
         {
-            System.out.println("Erreur DB");
+            problemLabel.setText(e.getMessage());
+            problemLabel.setVisible(true);
+        }
+        catch (NumberFormatException e)
+        {
+            problemLabel.setText("Veuillez entrer un TimeStamp Valide");
+            problemLabel.setVisible(true);
         }
     }
 
     private void demarrerButtonClick()
     {
+        if(demarrerButton.getText().equals("Redemarrer"))
+        {
+            currentStamp = timeStamp-60;
+            demarrerButton.setText("Demarrer");
+        }
+
         graphThread = new GraphThread(this);
         graphThread.start();
         pauseButton.setVisible(true);
@@ -171,5 +192,12 @@ public class MainController {
 
     public void setCurrentStamp(int newValue) {
         currentStamp = newValue;
+    }
+
+    public void defilementTermine()
+    {
+        demarrerButton.setText("Redemarrer");
+        demarrerButton.setDisable(false);
+        pauseButton.setVisible(false);
     }
 }
