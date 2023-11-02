@@ -11,34 +11,36 @@ import model.DataSet;
 import use_case.GraphUseCase;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class MainController {
     @FXML
-    LineChart linearGraph;
+    private LineChart linearGraph;
     @FXML
-    Button pauseButton;
+    private Button pauseButton;
     @FXML
-    Button afficherButton;
+    private Button afficherButton;
     @FXML
-    CheckBox accXCB;
+    private CheckBox accXCB;
     @FXML
-    CheckBox accYCB;
+    private CheckBox accYCB;
     @FXML
-    CheckBox accZCB;
+    private CheckBox accZCB;
     @FXML
-    CheckBox gyroXCB;
+    private CheckBox gyroXCB;
     @FXML
-    CheckBox gyroYCB;
+    private CheckBox gyroYCB;
     @FXML
-    CheckBox gyroZCB;
+    private CheckBox gyroZCB;
     @FXML
-    CheckBox nodeCB;
+    private CheckBox nodeCB;
     @FXML
-    TextField timeStampTextField;
+    private TextField timeStampTextField;
     @FXML
-    Button demarrerButton;
-    private Thread graphThread;
+    private Button demarrerButton;
+    private GraphThread graphThread;
     private DataSet dataSet;
     private int timeStamp;
     private int currentStamp;
@@ -47,20 +49,7 @@ public class MainController {
     public MainController(GraphUseCase graphUseCase)
     {
         this.graphUseCase = graphUseCase;
-        graphThread = new Thread(() -> {
-            NumberAxis xAxis = (NumberAxis) linearGraph.getXAxis();
 
-            while(currentStamp <= timeStamp-10) {
-                try {
-                    Thread.sleep(500);
-                    xAxis.setLowerBound(currentStamp);
-                    xAxis.setUpperBound(currentStamp + 10);
-                    currentStamp = currentStamp + 1;
-                } catch (InterruptedException e) {
-                    return;
-                }
-            }
-        });
     }
     @FXML
     public void initialize() {
@@ -116,13 +105,19 @@ public class MainController {
 
     private void demarrerButtonClick()
     {
+        graphThread = new GraphThread(this);
         graphThread.start();
         pauseButton.setVisible(true);
+        pauseButton.setDisable(false);
+        demarrerButton.setDisable(true);
     }
 
     private void pauseButtonClick()
     {
         graphThread.interrupt();
+        demarrerButton.setDisable(false);
+        demarrerButton.setText("Reprendre");
+        pauseButton.setDisable(true);
     }
 
     private void setCheckBoxesVisibility(boolean choix)
@@ -147,27 +142,34 @@ public class MainController {
         }
     }
 
-    private void NodeVisibility(boolean choix)
-    {
-        for (XYChart.Data<Number, Double> data : dataSet.getAccX().getData()) {
-            data.getNode().setVisible(choix);
-        }
-        for (XYChart.Data<Number, Double> data : dataSet.getAccY().getData()) {
-            data.getNode().setVisible(choix);
-        }
-        for (XYChart.Data<Number, Double> data : dataSet.getAccZ().getData()) {
-            data.getNode().setVisible(choix);
-        }
-        for (XYChart.Data<Number, Double> data : dataSet.getGyroX().getData()) {
-            data.getNode().setVisible(choix);
-        }
-        for (XYChart.Data<Number, Double> data : dataSet.getGyroZ().getData()) {
-            data.getNode().setVisible(choix);
-        }
-        for (XYChart.Data<Number, Double> data : dataSet.getGyroY().getData()) {
-            data.getNode().setVisible(choix);
+    private void NodeVisibility(boolean choix) {
+        CheckBox[] checkBoxes = {accXCB, accYCB, accZCB, gyroXCB, gyroYCB, gyroZCB};
+        List<XYChart.Series<Number, Double>> seriesList = Arrays.asList(dataSet.getAccX(), dataSet.getAccY(), dataSet.getAccZ(), dataSet.getGyroX(), dataSet.getGyroY(), dataSet.getGyroZ());
+
+        for (int i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].isSelected()) {
+                XYChart.Series<Number, Double> currentSeries = seriesList.get(i);
+                for (XYChart.Data<Number, Double> data : currentSeries.getData()) {
+                    data.getNode().setVisible(choix);
+                }
+            }
         }
     }
 
 
+    public LineChart getLinearGraph() {
+        return linearGraph;
+    }
+
+    public int getTimeStamp() {
+        return timeStamp;
+    }
+
+    public int getCurrentStamp() {
+        return currentStamp;
+    }
+
+    public void setCurrentStamp(int newValue) {
+        currentStamp = newValue;
+    }
 }
