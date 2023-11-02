@@ -1,0 +1,10 @@
+#afficherButton{
+
+}
+
+#linearGraph{
+
+}
+.chart-series-line {
+    -fx-stroke-width: 2px; /* Largeur de la ligne */
+}
