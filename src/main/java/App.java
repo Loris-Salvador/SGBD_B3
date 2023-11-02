@@ -22,6 +22,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle("Analyse de comportement routier");
         stage.show();
+
     }
 
     public static void main(String[] args) {

@@ -39,6 +39,10 @@ public class Ords {
         {
             throw new DataBaseException("TimeStamp inexistant");
         }
+        else if(list.getFirst().getTimeStamp() != timestamp2)
+        {
+            throw new DataBaseException("Pas assez de donnees");
+        }
 
         return list;
     }
