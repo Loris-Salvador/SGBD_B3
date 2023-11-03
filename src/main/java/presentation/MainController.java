@@ -90,10 +90,8 @@ public class MainController {
         try
         {
             dataSet = graphUseCase.getDataSet(Integer.parseInt(timeStampTextField.getText()));
-
             linearGraph.getData().removeAll();
             linearGraph.getData().clear();
-
 
             linearGraph.getData().addAll(
                     dataSet.getAccX(),
