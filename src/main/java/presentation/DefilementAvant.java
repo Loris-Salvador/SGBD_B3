@@ -27,6 +27,7 @@ public class DefilementAvant extends Thread {
                 return;
             }
         }
+        controller.setCurrentStamp(controller.getCurrentStamp() - 1);
         Platform.runLater(() -> {
             controller.finGraph();
         });

@@ -10,8 +10,15 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import core.model.DataSet;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +30,6 @@ public class MainController {
     private ComboBox jugementComboBox;
     @FXML
     private Button sauvegarderButton;
-
     @FXML
     private Button avancerButton;
     @FXML
@@ -118,16 +124,22 @@ public class MainController {
             pauseButton.setDisable(true);
             jugementComboBox.setVisible(true);
             sauvegarderButton.setVisible(true);
+
+            accXCB.setSelected(true);
+            accYCB.setSelected(true);
+            accZCB.setSelected(true);
+            gyroXCB.setSelected(true);
+            gyroYCB.setSelected(true);
+            gyroZCB.setSelected(true);
+            nodeCB.setSelected(true);
         }
         catch (DataBaseException e)
         {
-            problemLabel.setText(e.getMessage());
-            problemLabel.setVisible(true);
+            afficherInfoLabel(e.getMessage(), false);
         }
         catch (NumberFormatException e)
         {
-            problemLabel.setText("Veuillez entrer un TimeStamp Valide");
-            problemLabel.setVisible(true);
+            afficherInfoLabel("Veuillez entrer un timeStamp valide", false);
         }
     }
 
@@ -168,32 +180,10 @@ public class MainController {
     }
 
     private void sauvegarderButtonClick() {
-        problemLabel.setText("Veuillez entrer un jugement");
-        problemLabel.setVisible(true);
-
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Platform.runLater(() -> {
-                FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), problemLabel);
-                fadeOut.setFromValue(1.0);
-                fadeOut.setToValue(0.0);
-
-                fadeOut.setOnFinished(event -> {
-                    problemLabel.setVisible(false);
-                    problemLabel.setOpacity(1.0);
-                });
-
-                fadeOut.play();
-            });
-        });
-
-        thread.setDaemon(true);
-        thread.start();
+        if(jugementComboBox.getValue() == null) {
+            afficherInfoLabel("Veuillez entrer un jugement", false);
+            return;
+        }
     }
 
 
@@ -255,6 +245,32 @@ public class MainController {
     {
         pauseButton.setDisable(true);
         sauvegarderButton.setDisable(false);
+    }
+
+    private void afficherInfoLabel(String text, boolean info)
+    {
+        javafx.scene.paint.Color color;
+
+        if(info)
+            color = javafx.scene.paint.Color.GREEN;
+        else
+            color = Color.RED;
+
+
+        problemLabel.setText(text);
+        problemLabel.setTextFill(color);
+        problemLabel.setVisible(true);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), problemLabel);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        fadeOut.setOnFinished(event -> {
+            problemLabel.setVisible(false);
+            problemLabel.setOpacity(1.0);
+        });
+
+        fadeOut.play();
     }
 
 }
