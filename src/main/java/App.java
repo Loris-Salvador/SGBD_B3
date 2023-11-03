@@ -1,20 +1,23 @@
-import controller.MainController;
+import domain.GraphUseCase;
+import domain.GraphUseCaseImpl;
+import presentation.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import repository.Ords;
-import use_case.GraphUseCase;
+import data.Ords;
+import repository.Repositoryimpl;
 
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Ords repository = new Ords();
-        GraphUseCase useCase = new GraphUseCase(repository);
+        Ords ords = new Ords();
+        Repositoryimpl repository = new Repositoryimpl(ords);
+        GraphUseCaseImpl useCase = new GraphUseCaseImpl(repository);
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("view/main-window.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("presentation/main-window.fxml"));
         fxmlLoader.setController(new MainController(useCase));
 
         Scene scene = new Scene(fxmlLoader.load(), 1000, 550);

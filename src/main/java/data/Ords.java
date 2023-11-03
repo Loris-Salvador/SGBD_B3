@@ -1,9 +1,10 @@
-package repository;
+package data;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import exception.DataBaseException;
-import model.DataCar;
+import core.exception.DataBaseException;
+import core.model.DataCar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,19 +13,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class Ords {
+public class Ords implements DataCarSource{
     public Ords()
     {
 
     }
 
-    public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws IOException, DataBaseException {
+    public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws DataBaseException {
 
         int timestamp2 = timeStamp - 60;
         String reponse = executeRequest("http://192.168.203.140:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNodeResponse = objectMapper.readTree(reponse);
+        JsonNode jsonNodeResponse = null;
+        try {
+            jsonNodeResponse = objectMapper.readTree(reponse);
+        } catch (JsonProcessingException e) {
+            throw new DataBaseException("Erreur recuperation donnees");
+        }
         JsonNode itemNode = jsonNodeResponse.get("items");
 
         ArrayList<DataCar> list = new ArrayList<>();
@@ -47,25 +53,33 @@ public class Ords {
         return list;
     }
 
-    private String executeRequest(String urlRequest) throws IOException {
+    private String executeRequest(String urlRequest) throws DataBaseException {
 
+        try {
         URL url = new URL(urlRequest);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
         conn.setRequestMethod("GET");
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
 
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            String responseString = response.toString();
+
+            return responseString;
         }
-        reader.close();
-
-        String responseString = response.toString();
-
-        return responseString;
+        catch (IOException e)
+        {
+            throw new DataBaseException("Erreur recuperation donnees");
+        }
 
     }
 }

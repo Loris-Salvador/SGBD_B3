@@ -1,4 +1,4 @@
-package controller;
+package presentation;
 
 import javafx.application.Platform;
 import javafx.scene.chart.NumberAxis;

@@ -1,25 +1,25 @@
-package use_case;
+package domain;
 
-import exception.DataBaseException;
+import core.exception.DataBaseException;
 import javafx.scene.chart.XYChart;
-import model.DataCar;
-import model.DataSet;
-import repository.Ords;
+import core.model.DataCar;
+import core.model.DataSet;
+import repository.DataCarRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GraphUseCase {
+public class GraphUseCaseImpl implements GraphUseCase{
 
-    private Ords repo;
+    private DataCarRepository repo;
     private DataSet dataSet;
 
-    public GraphUseCase(Ords repo)
+    public GraphUseCaseImpl(DataCarRepository repo)
     {
-         this.repo = repo;
+        this.repo = repo;
     }
 
-    public DataSet getDataSet(int timeStamp) throws IOException, DataBaseException {
+    public DataSet getDataSet(int timeStamp) throws DataBaseException {
 
         ArrayList<DataCar> dataCar = repo.getDataFromTimeStamp(timeStamp);
 

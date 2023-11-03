@@ -1,6 +1,4 @@
-package exception;
-
-import model.DataSet;
+package core.exception;
 
 public class DataBaseException extends Exception{
 

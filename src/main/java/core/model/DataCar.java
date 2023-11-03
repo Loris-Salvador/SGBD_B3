@@ -1,8 +1,7 @@
-package model;
+package core.model;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
-import javafx.scene.chart.XYChart;
 
 public class DataCar {
     private double accX;

@@ -1,6 +1,7 @@
-package controller;
+package presentation;
 
-import exception.DataBaseException;
+import core.exception.DataBaseException;
+import domain.GraphUseCase;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -9,8 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import model.DataSet;
-import use_case.GraphUseCase;
+import core.model.DataSet;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -106,7 +106,7 @@ public class MainController {
             demarrerButton.setVisible(true);
             pauseButton.setVisible(false);
         }
-        catch (DataBaseException | IOException e)
+        catch (DataBaseException e)
         {
             problemLabel.setText(e.getMessage());
             problemLabel.setVisible(true);
