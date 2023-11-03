@@ -2,15 +2,15 @@ package presentation;
 
 import core.exception.DataBaseException;
 import domain.GraphUseCase;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import core.model.DataSet;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,6 +18,16 @@ import java.util.List;
 
 
 public class MainController {
+    private Button lastButtonclicked;
+    @FXML
+    private ComboBox jugementComboBox;
+    @FXML
+    private Button sauvegarderButton;
+
+    @FXML
+    private Button avancerButton;
+    @FXML
+    private Button reculerButton;
     @FXML
     private Label problemLabel;
     @FXML
@@ -42,9 +52,7 @@ public class MainController {
     private CheckBox nodeCB;
     @FXML
     private TextField timeStampTextField;
-    @FXML
-    private Button demarrerButton;
-    private GraphThread graphThread;
+    private Thread graphThread;
     private DataSet dataSet;
     private int timeStamp;
     private int currentStamp;
@@ -57,8 +65,10 @@ public class MainController {
     @FXML
     public void initialize() {
         afficherButton.setOnAction(event -> afficherButtonClick());
-        demarrerButton.setOnAction(event -> demarrerButtonClick());
         pauseButton.setOnAction(event -> pauseButtonClick());
+        avancerButton.setOnAction(event -> avancerButtonClick());
+        reculerButton.setOnAction(event -> reculerButtonClick());
+        sauvegarderButton.setOnAction(event -> sauvegarderButtonClick());
         accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(accXCB, dataSet.getAccX()));
         accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(accYCB, dataSet.getAccY()));
         accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(accZCB, dataSet.getAccZ()));
@@ -97,14 +107,17 @@ public class MainController {
             xAxis.setUpperBound(currentStamp+10);
             setCheckBoxesVisibility(true);
 
-
             if(problemLabel.isVisible())
             {
                 problemLabel.setVisible(false);
             }
-            demarrerButton.setText("Demarrer");
-            demarrerButton.setVisible(true);
-            pauseButton.setVisible(false);
+            avancerButton.setVisible(true);
+            reculerButton.setVisible(true);
+            reculerButton.setDisable(true);
+            pauseButton.setVisible(true);
+            pauseButton.setDisable(true);
+            jugementComboBox.setVisible(true);
+            sauvegarderButton.setVisible(true);
         }
         catch (DataBaseException e)
         {
@@ -118,28 +131,72 @@ public class MainController {
         }
     }
 
-    private void demarrerButtonClick()
-    {
-        if(demarrerButton.getText().equals("Redemarrer"))
-        {
-            currentStamp = timeStamp-60;
-            demarrerButton.setText("Demarrer");
-        }
-
-        graphThread = new GraphThread(this);
-        graphThread.start();
-        pauseButton.setVisible(true);
-        pauseButton.setDisable(false);
-        demarrerButton.setDisable(true);
-    }
-
     private void pauseButtonClick()
     {
         graphThread.interrupt();
-        demarrerButton.setDisable(false);
-        demarrerButton.setText("Reprendre");
         pauseButton.setDisable(true);
+        avancerButton.setDisable(false);
+        reculerButton.setDisable(false);
+        sauvegarderButton.setDisable(false);
     }
+
+    private void avancerButtonClick()
+    {
+        if(graphThread != null && graphThread.isAlive())
+            graphThread.interrupt();
+
+        pauseButton.setDisable(false);
+        graphThread = new DefilementAvant(this);
+        graphThread.start();
+        avancerButton.setDisable(true);
+        reculerButton.setDisable(false);
+        sauvegarderButton.setDisable(true);
+    }
+
+    private void reculerButtonClick()
+    {
+        if(graphThread != null && graphThread.isAlive())
+            graphThread.interrupt();
+
+        pauseButton.setDisable(false);
+        graphThread = new DefilementArriere(this);
+        graphThread.start();
+        reculerButton.setDisable(true);
+        avancerButton.setDisable(false);
+        sauvegarderButton.setDisable(true);
+
+    }
+
+    private void sauvegarderButtonClick() {
+        problemLabel.setText("Veuillez entrer un jugement");
+        problemLabel.setVisible(true);
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Platform.runLater(() -> {
+                FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), problemLabel);
+                fadeOut.setFromValue(1.0);
+                fadeOut.setToValue(0.0);
+
+                fadeOut.setOnFinished(event -> {
+                    problemLabel.setVisible(false);
+                    problemLabel.setOpacity(1.0);
+                });
+
+                fadeOut.play();
+            });
+        });
+
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+
 
     private void setCheckBoxesVisibility(boolean choix)
     {
@@ -194,10 +251,10 @@ public class MainController {
         currentStamp = newValue;
     }
 
-    public void defilementTermine()
+    public void finGraph()
     {
-        demarrerButton.setText("Redemarrer");
-        demarrerButton.setDisable(false);
-        pauseButton.setVisible(false);
+        pauseButton.setDisable(true);
+        sauvegarderButton.setDisable(false);
     }
+
 }

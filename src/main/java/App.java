@@ -23,6 +23,8 @@ public class App extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1000, 550);
         scene.getStylesheets().add(getClass().getResource("style/main-window-style.css").toExternalForm());
         stage.setScene(scene);
+        stage.setMinWidth(1050);
+        stage.setMinHeight(600);
         stage.setTitle("Analyse de comportement routier");
         stage.show();
 
