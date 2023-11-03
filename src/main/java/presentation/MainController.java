@@ -3,7 +3,6 @@ package presentation;
 import core.exception.DataBaseException;
 import domain.GraphUseCase;
 import javafx.animation.FadeTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -13,19 +12,13 @@ import core.model.DataSet;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-
-import java.awt.*;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 
 public class MainController {
-    private Button lastButtonclicked;
     @FXML
     private ComboBox jugementComboBox;
     @FXML
@@ -178,10 +171,16 @@ public class MainController {
     }
 
     private void sauvegarderButtonClick() {
-        if(jugementComboBox.getValue() == null) {
+
+        if(jugementComboBox.getValue() == null)
+        {
             afficherInfoLabel("Veuillez entrer un jugement", false);
             return;
         }
+
+        graphUseCase.saveSnapShot(linearGraph);
+
+        afficherInfoLabel("Sauvegarde réussie !", true);
     }
 
 

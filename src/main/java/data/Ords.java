@@ -22,7 +22,7 @@ public class Ords implements DataCarSource{
     public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws DataBaseException {
 
         int timestamp2 = timeStamp - 60;
-        String reponse = executeRequest("http://192.168.203.140:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
+        String reponse = executeRequest("http://192.168.203.141:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNodeResponse = null;

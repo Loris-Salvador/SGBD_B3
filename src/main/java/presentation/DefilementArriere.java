@@ -16,7 +16,7 @@ public class DefilementArriere extends Thread {
     {
         NumberAxis xAxis = (NumberAxis) controller.getLinearGraph().getXAxis();
 
-        while(controller.getCurrentStamp() >= controller.getTimeStamp()-60) {
+        while(controller.getCurrentStamp() >= controller.getTimeStamp()-61) {
             try {
                 Thread.sleep(500);
                 xAxis.setLowerBound(controller.getCurrentStamp());
