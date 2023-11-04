@@ -1,6 +1,9 @@
 package domain;
 
 import core.exception.DataBaseException;
+import core.exception.SauvegardeException;
+import core.model.Instantane;
+import core.model.Jugement;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
@@ -11,12 +14,14 @@ import javafx.scene.image.WritableImage;
 import repository.DataCarRepository;
 
 import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class GraphUseCaseImpl implements GraphUseCase{
-
     private DataCarRepository repo;
     private DataSet dataSet;
 
@@ -25,6 +30,7 @@ public class GraphUseCaseImpl implements GraphUseCase{
         this.repo = repo;
     }
 
+    @Override
     public DataSet getDataSet(int stamp) throws DataBaseException {
 
         ArrayList<DataCar> dataCar = repo.getDataFromTimeStamp(stamp);
@@ -51,15 +57,33 @@ public class GraphUseCaseImpl implements GraphUseCase{
 
         return dataSet;
     }
-
-    public void saveSnapShot(LineChart chart)
+    @Override
+    public void saveSnapShot(LineChart chart, int timeStamp, String jugementStr) throws SauvegardeException
     {
+        Jugement jugement = null;
+
+        if(jugementStr.equals("En Droit"))
+            jugement = Jugement.DROIT;
+        else if(jugementStr.equals("En Tort"))
+            jugement = Jugement.TORT;
+
+        byte[] byteArray;
+
         WritableImage snapshot = chart.snapshot(new SnapshotParameters(), null);
-        File file = new File("chart_snapshot.png");
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
         try {
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", outputStream);
+            byteArray = outputStream.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SauvegardeException("probleme de sauvegarde");
         }
+
+        String encoded = Base64.getEncoder().encodeToString(byteArray);
+
+
+        Instantane instantane = new Instantane(encoded, jugement, timeStamp);
+
+        repo.saveInstantane(instantane);
     }
 }

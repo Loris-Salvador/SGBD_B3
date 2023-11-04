@@ -1,6 +1,7 @@
 package presentation;
 
 import core.exception.DataBaseException;
+import core.exception.SauvegardeException;
 import domain.GraphUseCase;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
@@ -16,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import java.util.Arrays;
 import java.util.List;
+
+import static core.constant.GraphConstant.*;
 
 
 public class MainController {
@@ -80,6 +83,8 @@ public class MainController {
 
     private void afficherButtonClick()
     {
+        if(graphThread != null && graphThread.isAlive())
+            graphThread.interrupt();
         try
         {
             dataSet = graphUseCase.getDataSet(Integer.parseInt(timeStampTextField.getText()));
@@ -96,12 +101,12 @@ public class MainController {
             );
 
             timeStamp = Integer.parseInt(timeStampTextField.getText());
-            currentStamp = timeStamp -60;
+            currentStamp = timeStamp - FROM_TIME;
             NumberAxis xAxis = (NumberAxis) linearGraph.getXAxis();
             xAxis.setAutoRanging(false);
-            xAxis.setTickUnit(1);
-            xAxis.setLowerBound(currentStamp-1);
-            xAxis.setUpperBound(currentStamp+10);
+            xAxis.setTickUnit(ECHELLE);
+            xAxis.setLowerBound(currentStamp-ECHELLE);
+            xAxis.setUpperBound(currentStamp+TAILLE_AXE_X);
             setCheckBoxesVisibility(true);
 
             if(problemLabel.isVisible())
@@ -109,6 +114,7 @@ public class MainController {
                 problemLabel.setVisible(false);
             }
             avancerButton.setVisible(true);
+            avancerButton.setDisable(false);
             reculerButton.setVisible(true);
             reculerButton.setDisable(true);
             pauseButton.setVisible(true);
@@ -123,6 +129,7 @@ public class MainController {
             gyroYCB.setSelected(true);
             gyroZCB.setSelected(true);
             nodeCB.setSelected(true);
+
         }
         catch (DataBaseException e)
         {
@@ -178,7 +185,13 @@ public class MainController {
             return;
         }
 
-        graphUseCase.saveSnapShot(linearGraph);
+        try {
+            graphUseCase.saveSnapShot(linearGraph, timeStamp, jugementComboBox.getValue().toString());
+        }
+        catch (SauvegardeException e)
+        {
+            afficherInfoLabel(e.getMessage(), false);
+        }
 
         afficherInfoLabel("Sauvegarde réussie !", true);
     }
