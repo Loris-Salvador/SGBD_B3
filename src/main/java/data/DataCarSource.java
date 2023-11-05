@@ -8,6 +8,6 @@ import core.model.Instantane;
 import java.util.ArrayList;
 
 public interface DataCarSource {
-    public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws DataBaseException;
-    public void saveInstantane(Instantane instantane) throws SauvegardeException;
+    ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws DataBaseException;
+    void saveInstantane(Instantane instantane) throws SauvegardeException;
 }

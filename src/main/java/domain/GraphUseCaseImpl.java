@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 public class GraphUseCaseImpl implements GraphUseCase{
-    private DataCarRepository repo;
+    private final DataCarRepository repo;
     private DataSet dataSet;
 
     public GraphUseCaseImpl(DataCarRepository repo)

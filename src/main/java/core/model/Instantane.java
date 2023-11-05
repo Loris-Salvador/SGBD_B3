@@ -1,14 +1,9 @@
 package core.model;
 
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Instantane {
 
     String image;
-    private Jugement jugement;
+    private core.model.Jugement jugement;
     private int timeStamp;
 
     public Instantane(String image, Jugement jugement, int timeStamp)
@@ -22,7 +17,7 @@ public class Instantane {
         return image;
     }
 
-    public Jugement getJugement() {
+    public core.model.Jugement getJugement() {
         return jugement;
     }
 

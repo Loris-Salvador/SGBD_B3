@@ -37,8 +37,6 @@ public class MainController {
     @FXML
     private Button pauseButton;
     @FXML
-    private Button afficherButton;
-    @FXML
     private CheckBox accXCB;
     @FXML
     private CheckBox accYCB;
@@ -58,7 +56,7 @@ public class MainController {
     private DataSet dataSet;
     private int timeStamp;
     private int currentStamp;
-    private GraphUseCase graphUseCase;
+    private final GraphUseCase graphUseCase;
 
     public MainController(GraphUseCase graphUseCase)
     {
@@ -66,7 +64,7 @@ public class MainController {
     }
     @FXML
     public void initialize() {
-        afficherButton.setOnAction(event -> afficherButtonClick());
+        timeStampTextField.setOnAction(event -> afficherGraphique());
         pauseButton.setOnAction(event -> pauseButtonClick());
         avancerButton.setOnAction(event -> avancerButtonClick());
         reculerButton.setOnAction(event -> reculerButtonClick());
@@ -81,7 +79,7 @@ public class MainController {
     }
 
 
-    private void afficherButtonClick()
+    private void afficherGraphique()
     {
         if(graphThread != null && graphThread.isAlive())
             graphThread.interrupt();

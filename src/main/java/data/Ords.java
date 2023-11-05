@@ -19,6 +19,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import static core.constant.GraphConstant.FROM_TIME;
+
 public class Ords implements DataCarSource{
     public Ords()
     {
@@ -28,7 +30,7 @@ public class Ords implements DataCarSource{
     @Override
     public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws DataBaseException {
 
-        int timestamp2 = timeStamp - 60;
+        int timestamp2 = timeStamp - FROM_TIME;
         String reponse = executeRequest("http://192.168.203.141:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
 
         ObjectMapper objectMapper = new ObjectMapper();
