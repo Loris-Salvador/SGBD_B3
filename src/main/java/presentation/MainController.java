@@ -22,6 +22,11 @@ import static core.constant.GraphConstant.*;
 
 
 public class MainController {
+    private Thread graphThread;
+    private DataSet dataSet;
+    private int timeStamp;
+    private int currentStamp;
+    private final GraphUseCase graphUseCase;
     @FXML
     private ComboBox jugementComboBox;
     @FXML
@@ -31,7 +36,7 @@ public class MainController {
     @FXML
     private Button reculerButton;
     @FXML
-    private Label problemLabel;
+    private Label infoLabel;
     @FXML
     private LineChart linearGraph;
     @FXML
@@ -52,11 +57,6 @@ public class MainController {
     private CheckBox nodeCB;
     @FXML
     private TextField timeStampTextField;
-    private Thread graphThread;
-    private DataSet dataSet;
-    private int timeStamp;
-    private int currentStamp;
-    private final GraphUseCase graphUseCase;
 
     public MainController(GraphUseCase graphUseCase)
     {
@@ -69,18 +69,17 @@ public class MainController {
         avancerButton.setOnAction(event -> avancerButtonClick());
         reculerButton.setOnAction(event -> reculerButtonClick());
         sauvegarderButton.setOnAction(event -> sauvegarderButtonClick());
-        accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(accXCB, dataSet.getAccX()));
-        accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(accYCB, dataSet.getAccY()));
-        accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(accZCB, dataSet.getAccZ()));
-        gyroXCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(gyroXCB, dataSet.getGyroX()));
-        gyroYCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(gyroYCB, dataSet.getGyroY()));
-        gyroZCB.selectedProperty().addListener((observable, oldValue, newValue) -> handleCheckBoxChanged(gyroZCB, dataSet.getGyroZ()));
+        accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(accXCB, dataSet.getAccX()));
+        accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(accYCB, dataSet.getAccY()));
+        accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(accZCB, dataSet.getAccZ()));
+        gyroXCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(gyroXCB, dataSet.getGyroX()));
+        gyroYCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(gyroYCB, dataSet.getGyroY()));
+        gyroZCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(gyroZCB, dataSet.getGyroZ()));
         nodeCB.selectedProperty().addListener((observable, oldValue, newValue) ->  NodeVisibility(newValue));
     }
 
 
-    private void afficherGraphique()
-    {
+    private void afficherGraphique() {
         if(graphThread != null && graphThread.isAlive())
             graphThread.interrupt();
         try
@@ -107,9 +106,9 @@ public class MainController {
             xAxis.setUpperBound(currentStamp+TAILLE_AXE_X);
             setCheckBoxesVisibility(true);
 
-            if(problemLabel.isVisible())
+            if(infoLabel.isVisible())
             {
-                problemLabel.setVisible(false);
+                infoLabel.setVisible(false);
             }
             avancerButton.setVisible(true);
             avancerButton.setDisable(false);
@@ -139,8 +138,7 @@ public class MainController {
         }
     }
 
-    private void pauseButtonClick()
-    {
+    private void pauseButtonClick() {
         graphThread.interrupt();
         pauseButton.setDisable(true);
         avancerButton.setDisable(false);
@@ -148,8 +146,7 @@ public class MainController {
         sauvegarderButton.setDisable(false);
     }
 
-    private void avancerButtonClick()
-    {
+    private void avancerButtonClick() {
         if(graphThread != null && graphThread.isAlive())
             graphThread.interrupt();
 
@@ -161,8 +158,7 @@ public class MainController {
         sauvegarderButton.setDisable(true);
     }
 
-    private void reculerButtonClick()
-    {
+    private void reculerButtonClick() {
         if(graphThread != null && graphThread.isAlive())
             graphThread.interrupt();
 
@@ -194,10 +190,7 @@ public class MainController {
         afficherInfoLabel("Sauvegarde réussie !", true);
     }
 
-
-
-    private void setCheckBoxesVisibility(boolean choix)
-    {
+    private void setCheckBoxesVisibility(boolean choix) {
         accXCB.setVisible(choix);
         accYCB.setVisible(choix);
         accZCB.setVisible(choix);
@@ -207,7 +200,7 @@ public class MainController {
         nodeCB.setVisible(choix);
     }
 
-    private void handleCheckBoxChanged(CheckBox checkBox, XYChart.Series<Number, Double> series) {
+    private void chekcBoxesChange(CheckBox checkBox, XYChart.Series<Number, Double> series) {
         boolean newValue = checkBox.isSelected();
         series.getNode().setVisible(newValue);
         if(newValue && !nodeCB.isSelected()) {
@@ -232,7 +225,6 @@ public class MainController {
         }
     }
 
-
     public LineChart getLinearGraph() {
         return linearGraph;
     }
@@ -249,14 +241,12 @@ public class MainController {
         currentStamp = newValue;
     }
 
-    public void finGraph()
-    {
+    public void finGraph() {
         pauseButton.setDisable(true);
         sauvegarderButton.setDisable(false);
     }
 
-    private void afficherInfoLabel(String text, boolean info)
-    {
+    private void afficherInfoLabel(String text, boolean info) {
         javafx.scene.paint.Color color;
 
         if(info)
@@ -265,17 +255,17 @@ public class MainController {
             color = Color.RED;
 
 
-        problemLabel.setText(text);
-        problemLabel.setTextFill(color);
-        problemLabel.setVisible(true);
+        infoLabel.setText(text);
+        infoLabel.setTextFill(color);
+        infoLabel.setVisible(true);
 
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), problemLabel);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), infoLabel);
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
         fadeOut.setOnFinished(event -> {
-            problemLabel.setVisible(false);
-            problemLabel.setOpacity(1.0);
+            infoLabel.setVisible(false);
+            infoLabel.setOpacity(1.0);
         });
 
         fadeOut.play();

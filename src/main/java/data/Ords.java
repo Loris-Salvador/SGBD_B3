@@ -18,6 +18,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 
 import static core.constant.GraphConstant.FROM_TIME;
 
@@ -30,31 +33,54 @@ public class Ords implements DataCarSource{
     @Override
     public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws DataBaseException {
 
-        int timestamp2 = timeStamp - FROM_TIME;
-        String reponse = executeRequest("http://192.168.203.141:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNodeResponse = null;
-        try {
-            jsonNodeResponse = objectMapper.readTree(reponse);
-        } catch (JsonProcessingException e) {
-            throw new DataBaseException("Erreur recuperation donnees");
-        }
-        JsonNode itemNode = jsonNodeResponse.get("items");
-
         ArrayList<DataCar> list = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNodeResponse;
 
-        for(JsonNode node : itemNode)
+        int timestamp2 = timeStamp - FROM_TIME;
+        int verifyData = timestamp2;
+
+        do
         {
-            DataCar dataCar = new DataCar(node);
-            list.add(dataCar);
+            String reponse = executeRequest("http://192.168.203.141:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
+
+            try {
+                jsonNodeResponse = objectMapper.readTree(reponse);
+            } catch (JsonProcessingException e) {
+                throw new DataBaseException("Erreur recuperation donnees");
+            }
+            JsonNode itemNode = jsonNodeResponse.get("items");
+
+            if(!list.isEmpty())//pagination eviter doublon
+            {
+                JsonNode node = itemNode.get(0);
+                DataCar dataCar = new DataCar(node);
+                while(list.getLast().getTimeStamp() == dataCar.getTimeStamp())
+                {
+                    list.removeLast();
+                    node = itemNode.get(0);
+                    dataCar = new DataCar(node);
+                }
+            }
+
+            for(JsonNode node : itemNode)
+            {
+                DataCar dataCar = new DataCar(node);
+                list.add(dataCar);
+            }
+
+            if(jsonNodeResponse.get("hasMore").asBoolean())
+            {
+                timestamp2 = list.getLast().getTimeStamp();
+            }
         }
+        while (jsonNodeResponse.get("hasMore").asBoolean());
 
         if(list.isEmpty() || list.getLast().getTimeStamp() != timeStamp)
         {
             throw new DataBaseException("TimeStamp inexistant");
         }
-        else if(list.getFirst().getTimeStamp() != timestamp2)
+        else if(list.getFirst().getTimeStamp() != verifyData)
         {
             throw new DataBaseException("Pas assez de donnees");
         }

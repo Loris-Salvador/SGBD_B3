@@ -74,7 +74,7 @@
                   <Button fx:id="avancerButton" focusTraversable="false" mnemonicParsing="false" text="&gt;&gt;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
-            <Label fx:id="problemLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="214.0" text="l" textFill="#cc3535" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+            <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="214.0" text="l" textFill="#cc3535" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
             <GridPane GridPane.rowIndex="9">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />

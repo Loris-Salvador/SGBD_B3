@@ -20,7 +20,7 @@ public class GraphConstant {
         }
 
         TAUX_RAFRAISHISSEMENT = Integer.parseInt(prop.getProperty("TAUX_RAFRAICHISSEMENT"));
-        FROM_TIME = Integer.parseInt(prop.getProperty("T-"));
+        FROM_TIME = Integer.parseInt(prop.getProperty("FROM_TIME"));
         ECHELLE = Integer.parseInt(prop.getProperty("ECHELLE"));
         TAILLE_AXE_X = Integer.parseInt(prop.getProperty("TAILLE_ABSCISSE"));
     }
