@@ -30,16 +30,16 @@
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="120.0" minHeight="10.0" percentHeight="12.0" prefHeight="120.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="120.0" minHeight="10.0" percentHeight="6.0" prefHeight="120.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="120.0" minHeight="10.0" percentHeight="6.0" prefHeight="120.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="11.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="77.99999618530273" minHeight="10.0" percentHeight="17.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" percentHeight="17.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" percentHeight="17.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
@@ -58,44 +58,44 @@
                 <CheckBox fx:id="gyroXCB" mnemonicParsing="false" prefWidth="147.0" selected="true" text="GyroX" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
                 <CheckBox fx:id="gyroYCB" mnemonicParsing="false" prefWidth="147.0" selected="true" text="GyroY" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
                 <CheckBox fx:id="gyroZCB" mnemonicParsing="false" prefWidth="147.0" selected="true" text="GyroZ" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
-            <CheckBox fx:id="nodeCB" mnemonicParsing="false" prefWidth="147.0" selected="true" text="Node" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-            <GridPane GridPane.rowIndex="10">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button fx:id="pauseButton" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Pause" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Button fx:id="reculerButton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" text="&lt;&lt;" visible="false" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Button fx:id="avancerButton" focusTraversable="false" mnemonicParsing="false" text="&gt;&gt;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-               </children>
-            </GridPane>
-            <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="214.0" text="l" textFill="#cc3535" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-            <GridPane GridPane.rowIndex="9">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <ComboBox fx:id="jugementComboBox" focusTraversable="false" prefHeight="25.0" prefWidth="101.0" promptText="Jugement" visible="false" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                      <items>
-                          <FXCollections fx:factory="observableArrayList">
-                              <String fx:value="En Droit" />
-                              <String fx:value="En Tort" />
-                          </FXCollections>
-                      </items>
-                  </ComboBox>
-                  <Button fx:id="sauvegarderButton" focusTraversable="false" mnemonicParsing="false" text="Sauvegarder" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                <CheckBox fx:id="nodeCB" mnemonicParsing="false" prefWidth="147.0" selected="true" text="Node" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                <GridPane GridPane.rowIndex="10">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Button fx:id="pauseButton" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Pause" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Button fx:id="reculerButton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" text="&lt;&lt;" visible="false" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Button fx:id="avancerButton" focusTraversable="false" mnemonicParsing="false" text="&gt;&gt;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                    </children>
+                </GridPane>
+                <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="214.0" text="l" textFill="#cc3535" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                <GridPane GridPane.rowIndex="9">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <ComboBox fx:id="jugementComboBox" focusTraversable="false" prefHeight="25.0" prefWidth="101.0" promptText="Jugement" visible="false" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="En Droit" />
+                                    <String fx:value="En Tort" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <Button fx:id="sauvegarderButton" focusTraversable="false" mnemonicParsing="false" text="Sauvegarder" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
 
-               </children>
-            </GridPane>
+                    </children>
+                </GridPane>
             </children>
         </GridPane>
     </children>

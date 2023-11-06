@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class GraphConstant {
-    public static final int TAUX_RAFRAISHISSEMENT; //milliseconde
+    public static int TAUX_RAFRAISHISSEMENT; //milliseconde
     public static final int FROM_TIME;
     public static final int ECHELLE;
     public static final int TAILLE_AXE_X;
@@ -27,6 +27,5 @@ public class GraphConstant {
         ECHELLE = Integer.parseInt(prop.getProperty("ECHELLE"));
         TAILLE_AXE_X = Integer.parseInt(prop.getProperty("TAILLE_ABSCISSE"));
     }
-
     public static void initGraphConstants(){}
 }

@@ -1,3 +1,4 @@
+import core.constant.GraphConstant;
 import domain.GraphUseCase;
 import domain.GraphUseCaseImpl;
 import presentation.MainController;
@@ -15,6 +16,7 @@ public class App extends Application {
         Ords ords = new Ords();
         Repositoryimpl repository = new Repositoryimpl(ords);
         GraphUseCaseImpl useCase = new GraphUseCaseImpl(repository);
+        GraphConstant.initGraphConstants();
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("presentation/main-window.fxml"));

@@ -1,5 +1,6 @@
 package presentation;
 
+import core.constant.GraphConstant;
 import core.exception.DataBaseException;
 import core.exception.SauvegardeException;
 import domain.GraphUseCase;
@@ -69,15 +70,14 @@ public class MainController {
         avancerButton.setOnAction(event -> avancerButtonClick());
         reculerButton.setOnAction(event -> reculerButtonClick());
         sauvegarderButton.setOnAction(event -> sauvegarderButtonClick());
-        accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(accXCB, dataSet.getAccX()));
-        accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(accYCB, dataSet.getAccY()));
-        accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(accZCB, dataSet.getAccZ()));
-        gyroXCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(gyroXCB, dataSet.getGyroX()));
-        gyroYCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(gyroYCB, dataSet.getGyroY()));
-        gyroZCB.selectedProperty().addListener((observable, oldValue, newValue) -> chekcBoxesChange(gyroZCB, dataSet.getGyroZ()));
+        accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accXCB, dataSet.getAccX()));
+        accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accYCB, dataSet.getAccY()));
+        accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accZCB, dataSet.getAccZ()));
+        gyroXCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroXCB, dataSet.getGyroX()));
+        gyroYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroYCB, dataSet.getGyroY()));
+        gyroZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroZCB, dataSet.getGyroZ()));
         nodeCB.selectedProperty().addListener((observable, oldValue, newValue) ->  NodeVisibility(newValue));
     }
-
 
     private void afficherGraphique() {
         if(graphThread != null && graphThread.isAlive())
@@ -147,7 +147,7 @@ public class MainController {
     }
 
     private void avancerButtonClick() {
-        if(graphThread != null && graphThread.isAlive())
+        if(graphThread != null && graphThread.isAlive() && graphThread instanceof DefilementArriere)
             graphThread.interrupt();
 
         pauseButton.setDisable(false);
@@ -200,7 +200,7 @@ public class MainController {
         nodeCB.setVisible(choix);
     }
 
-    private void chekcBoxesChange(CheckBox checkBox, XYChart.Series<Number, Double> series) {
+    private void checkBoxesChange(CheckBox checkBox, XYChart.Series<Number, Double> series) {
         boolean newValue = checkBox.isSelected();
         series.getNode().setVisible(newValue);
         if(newValue && !nodeCB.isSelected()) {
@@ -209,6 +209,8 @@ public class MainController {
         for (XYChart.Data<Number, Double> data : series.getData()) {
             data.getNode().setVisible(newValue);
         }
+
+        updateAxisScale();
     }
 
     private void NodeVisibility(boolean choix) {
@@ -263,6 +265,8 @@ public class MainController {
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
+
+
         fadeOut.setOnFinished(event -> {
             infoLabel.setVisible(false);
             infoLabel.setOpacity(1.0);
@@ -270,5 +274,50 @@ public class MainController {
 
         fadeOut.play();
     }
+
+    private void updateAxisScale() {
+        CheckBox checkBoxes[] = new CheckBox[6];
+        checkBoxes[0] = accXCB;
+        checkBoxes[1] = accYCB;
+        checkBoxes[2] = accZCB;
+        checkBoxes[3] = gyroXCB;
+        checkBoxes[4] = gyroYCB;
+        checkBoxes[5] = gyroZCB;
+        NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
+
+        double minYValue = Double.MAX_VALUE;
+        double maxYValue = Double.MIN_VALUE;
+
+        List<XYChart.Series<Number, Double>> seriesList = Arrays.asList(
+                dataSet.getAccX(),
+                dataSet.getAccY(),
+                dataSet.getAccZ(),
+                dataSet.getGyroX(),
+                dataSet.getGyroY(),
+                dataSet.getGyroZ()
+        );
+
+        for (int i = 0; i < seriesList.size(); i++) {
+            CheckBox checkBox = checkBoxes[i];
+            if (checkBox.isSelected()) {
+                XYChart.Series<Number, Double> series = seriesList.get(i);
+                for (XYChart.Data<Number, Double> data : series.getData()) {
+                    double yValue = data.getYValue();
+                    if (yValue < minYValue) {
+                        minYValue = yValue;
+                    }
+                    if (yValue > maxYValue) {
+                        maxYValue = yValue;
+                    }
+                }
+            }
+        }
+
+
+        linearGraph.getYAxis().setAutoRanging(false);
+        yAxis.setUpperBound(maxYValue);
+        yAxis.setLowerBound(minYValue);
+    }
+
 
 }
