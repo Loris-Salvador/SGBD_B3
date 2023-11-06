@@ -30,7 +30,7 @@ public class DefilementArriere extends Thread {
                 controller.setCurrentStamp(controller.getCurrentStamp() - ECHELLE);
                 xAxis.setLowerBound(controller.getCurrentStamp());
                 xAxis.setUpperBound(controller.getCurrentStamp() + TAILLE_AXE_X);
-                Thread.sleep(TAUX_RAFRAISHISSEMENT);
+                Thread.sleep(controller.getRafraichissement());
             } catch (InterruptedException e) {
                 return;
             }

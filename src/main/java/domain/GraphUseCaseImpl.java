@@ -18,6 +18,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 
@@ -81,9 +83,22 @@ public class GraphUseCaseImpl implements GraphUseCase{
 
         String encoded = Base64.getEncoder().encodeToString(byteArray);
 
+        LocalDateTime currentDateTime = LocalDateTime.now();
 
-        Instantane instantane = new Instantane(encoded, jugement, timeStamp);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = currentDateTime.format(formatter);
+
+        Instantane instantane = new Instantane(encoded, jugement, timeStamp, formattedDateTime);
 
         repo.saveInstantane(instantane);
+    }
+
+    public static void main(String[] args) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = currentDateTime.format(formatter);
+
+        System.out.println("Date et heure courantes : " + formattedDateTime);
     }
 }

@@ -2,27 +2,30 @@ package core.model;
 
 public class Instantane {
 
-    String image;
+    private String image;
     private core.model.Jugement jugement;
     private int timeStamp;
+    private String dateExpertise;
 
-    public Instantane(String image, Jugement jugement, int timeStamp)
+    public Instantane(String image, Jugement jugement, int timeStamp, String dateExpertise)
     {
         this.image = image;
         this.jugement = jugement;
         this.timeStamp = timeStamp;
+        this.dateExpertise = dateExpertise;
     }
 
     public String getImage() {
         return image;
     }
 
-    public core.model.Jugement getJugement() {
+    public Jugement getJugement() {
         return jugement;
     }
 
     public int getTimeStamp() {
         return timeStamp;
     }
+    public String getDateExpertise() { return dateExpertise; }
 
 }

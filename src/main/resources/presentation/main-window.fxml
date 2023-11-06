@@ -64,6 +64,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -71,7 +72,8 @@
                     <children>
                         <Button fx:id="pauseButton" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Pause" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Button fx:id="reculerButton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" text="&lt;&lt;" visible="false" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="avancerButton" focusTraversable="false" mnemonicParsing="false" text="&gt;&gt;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Button fx:id="avancerButton" focusTraversable="false" mnemonicParsing="false" text="&gt;&gt;" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
+                  <Button fx:id="multiplicateurButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" text="X1" visible="false" GridPane.columnIndex="3" />
                     </children>
                 </GridPane>
                 <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="214.0" text="l" textFill="#cc3535" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />

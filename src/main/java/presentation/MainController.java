@@ -28,8 +28,12 @@ public class MainController {
     private int timeStamp;
     private int currentStamp;
     private final GraphUseCase graphUseCase;
+    private int multiplicateur;
+    private int rafraichissement;
     @FXML
     private ComboBox jugementComboBox;
+    @FXML
+    private Button multiplicateurButton;
     @FXML
     private Button sauvegarderButton;
     @FXML
@@ -59,9 +63,10 @@ public class MainController {
     @FXML
     private TextField timeStampTextField;
 
-    public MainController(GraphUseCase graphUseCase)
-    {
+    public MainController(GraphUseCase graphUseCase) {
         this.graphUseCase = graphUseCase;
+        multiplicateur = 1;
+        rafraichissement = TAUX_RAFRAISHISSEMENT;
     }
     @FXML
     public void initialize() {
@@ -70,6 +75,7 @@ public class MainController {
         avancerButton.setOnAction(event -> avancerButtonClick());
         reculerButton.setOnAction(event -> reculerButtonClick());
         sauvegarderButton.setOnAction(event -> sauvegarderButtonClick());
+        multiplicateurButton.setOnAction(event -> multiplicateurButtonClick());
         accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accXCB, dataSet.getAccX()));
         accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accYCB, dataSet.getAccY()));
         accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accZCB, dataSet.getAccZ()));
@@ -112,6 +118,7 @@ public class MainController {
             }
             avancerButton.setVisible(true);
             avancerButton.setDisable(false);
+            multiplicateurButton.setVisible(true);
             reculerButton.setVisible(true);
             reculerButton.setDisable(true);
             pauseButton.setVisible(true);
@@ -189,6 +196,20 @@ public class MainController {
 
         afficherInfoLabel("Sauvegarde réussie !", true);
     }
+    private void multiplicateurButtonClick(){
+
+        if(multiplicateur < MULTIPLICATEUR_MAX)
+        {
+            multiplicateur = multiplicateur * 2;
+        }
+        else
+        {
+            multiplicateur = 1;
+        }
+
+        multiplicateurButton.setText("X" + multiplicateur);
+        rafraichissement = TAUX_RAFRAISHISSEMENT / multiplicateur;
+    }
 
     private void setCheckBoxesVisibility(boolean choix) {
         accXCB.setVisible(choix);
@@ -241,6 +262,9 @@ public class MainController {
 
     public void setCurrentStamp(int newValue) {
         currentStamp = newValue;
+    }
+    public int getRafraichissement(){
+        return rafraichissement;
     }
 
     public void finGraph() {
@@ -318,6 +342,4 @@ public class MainController {
         yAxis.setUpperBound(maxYValue);
         yAxis.setLowerBound(minYValue);
     }
-
-
 }
