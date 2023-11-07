@@ -11,13 +11,11 @@ import javafx.scene.chart.XYChart;
 import core.model.DataCar;
 import core.model.DataSet;
 import javafx.scene.image.WritableImage;
-import repository.DataCarRepository;
+import data.DataCarRepository;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

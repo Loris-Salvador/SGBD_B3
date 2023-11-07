@@ -24,7 +24,7 @@ import java.util.HashSet;
 
 import static core.constant.GraphConstant.FROM_TIME;
 
-public class Ords implements DataCarSource{
+public class Ords implements DataCarRepository{
     public Ords()
     {
 

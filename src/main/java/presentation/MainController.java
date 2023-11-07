@@ -1,6 +1,5 @@
 package presentation;
 
-import core.constant.GraphConstant;
 import core.exception.DataBaseException;
 import core.exception.SauvegardeException;
 import domain.GraphUseCase;
@@ -14,6 +13,7 @@ import core.model.DataSet;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import java.util.Arrays;
@@ -106,6 +106,11 @@ public class MainController {
             timeStamp = Integer.parseInt(timeStampTextField.getText());
             currentStamp = timeStamp - FROM_TIME;
             NumberAxis xAxis = (NumberAxis) linearGraph.getXAxis();
+            NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
+            yAxis.setAutoRanging(false);
+            yAxis.setLowerBound(-3);
+            yAxis.setUpperBound(3);
+            yAxis.setTickUnit(1);
             xAxis.setAutoRanging(false);
             xAxis.setTickUnit(ECHELLE);
             xAxis.setLowerBound(currentStamp-ECHELLE);
@@ -133,6 +138,8 @@ public class MainController {
             gyroYCB.setSelected(true);
             gyroZCB.setSelected(true);
             nodeCB.setSelected(true);
+
+            linearGraph.setOnScroll(event -> zoomOnGraph(event));
 
         }
         catch (DataBaseException e)
@@ -196,6 +203,7 @@ public class MainController {
 
         afficherInfoLabel("Sauvegarde réussie !", true);
     }
+
     private void multiplicateurButtonClick(){
 
         if(multiplicateur < MULTIPLICATEUR_MAX)
@@ -230,8 +238,28 @@ public class MainController {
         for (XYChart.Data<Number, Double> data : series.getData()) {
             data.getNode().setVisible(newValue);
         }
+    }
 
-        updateAxisScale();
+    private void zoomOnGraph(ScrollEvent event) {
+        NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
+        yAxis.setAutoRanging(false);
+
+        double test = yAxis.getUpperBound()/30;
+
+        if(event.getDeltaY() > 0)
+        {
+            yAxis.setLowerBound(yAxis.getLowerBound() + test);
+            yAxis.setUpperBound(yAxis.getUpperBound() - test);
+        }
+        else
+        {
+            yAxis.setLowerBound(yAxis.getLowerBound() - test);
+            yAxis.setUpperBound(yAxis.getUpperBound() + test);
+        }
+
+        yAxis.setTickUnit(yAxis.getUpperBound()/10);
+
+
     }
 
     private void NodeVisibility(boolean choix) {
@@ -263,6 +291,7 @@ public class MainController {
     public void setCurrentStamp(int newValue) {
         currentStamp = newValue;
     }
+
     public int getRafraichissement(){
         return rafraichissement;
     }
@@ -299,47 +328,4 @@ public class MainController {
         fadeOut.play();
     }
 
-    private void updateAxisScale() {
-        CheckBox checkBoxes[] = new CheckBox[6];
-        checkBoxes[0] = accXCB;
-        checkBoxes[1] = accYCB;
-        checkBoxes[2] = accZCB;
-        checkBoxes[3] = gyroXCB;
-        checkBoxes[4] = gyroYCB;
-        checkBoxes[5] = gyroZCB;
-        NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
-
-        double minYValue = Double.MAX_VALUE;
-        double maxYValue = Double.MIN_VALUE;
-
-        List<XYChart.Series<Number, Double>> seriesList = Arrays.asList(
-                dataSet.getAccX(),
-                dataSet.getAccY(),
-                dataSet.getAccZ(),
-                dataSet.getGyroX(),
-                dataSet.getGyroY(),
-                dataSet.getGyroZ()
-        );
-
-        for (int i = 0; i < seriesList.size(); i++) {
-            CheckBox checkBox = checkBoxes[i];
-            if (checkBox.isSelected()) {
-                XYChart.Series<Number, Double> series = seriesList.get(i);
-                for (XYChart.Data<Number, Double> data : series.getData()) {
-                    double yValue = data.getYValue();
-                    if (yValue < minYValue) {
-                        minYValue = yValue;
-                    }
-                    if (yValue > maxYValue) {
-                        maxYValue = yValue;
-                    }
-                }
-            }
-        }
-
-
-        linearGraph.getYAxis().setAutoRanging(false);
-        yAxis.setUpperBound(maxYValue);
-        yAxis.setLowerBound(minYValue);
-    }
 }

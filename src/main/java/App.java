@@ -7,15 +7,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import data.Ords;
-import repository.Repositoryimpl;
 
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
         Ords ords = new Ords();
-        Repositoryimpl repository = new Repositoryimpl(ords);
-        GraphUseCaseImpl useCase = new GraphUseCaseImpl(repository);
+        GraphUseCaseImpl useCase = new GraphUseCaseImpl(ords);
         GraphConstant.initGraphConstants();
 
 

@@ -33,8 +33,6 @@ public class GraphConstant {
             System.exit(1);
         }
 
-
-
         TAUX_RAFRAISHISSEMENT = tauxRafraichissement;
         FROM_TIME = fromTime;
         ECHELLE = echelle;

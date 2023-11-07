@@ -1,4 +1,4 @@
-package repository;
+package data;
 
 import core.exception.DataBaseException;
 import core.exception.SauvegardeException;
