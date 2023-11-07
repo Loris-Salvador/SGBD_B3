@@ -244,23 +244,25 @@ public class MainController {
         NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
         yAxis.setAutoRanging(false);
 
-        double test = yAxis.getUpperBound()/30;
+        double zoomFactor = 0.03; // Ajustez ce facteur selon vos besoins
 
-        if(event.getDeltaY() > 0)
-        {
-            yAxis.setLowerBound(yAxis.getLowerBound() + test);
-            yAxis.setUpperBound(yAxis.getUpperBound() - test);
+        double axisRange = yAxis.getUpperBound() - yAxis.getLowerBound();
+
+        if (event.getDeltaY() > 0) {
+            // Zoom in
+            double zoomAmount = axisRange * zoomFactor;
+            yAxis.setLowerBound(yAxis.getLowerBound() + zoomAmount);
+            yAxis.setUpperBound(yAxis.getUpperBound() - zoomAmount);
+        } else {
+            // Zoom out
+            double zoomAmount = axisRange * zoomFactor;
+            yAxis.setLowerBound(yAxis.getLowerBound() - zoomAmount);
+            yAxis.setUpperBound(yAxis.getUpperBound() + zoomAmount);
         }
-        else
-        {
-            yAxis.setLowerBound(yAxis.getLowerBound() - test);
-            yAxis.setUpperBound(yAxis.getUpperBound() + test);
-        }
 
-        yAxis.setTickUnit(yAxis.getUpperBound()/10);
-
-
+        yAxis.setTickUnit(axisRange / 10);
     }
+
 
     private void NodeVisibility(boolean choix) {
         CheckBox[] checkBoxes = {accXCB, accYCB, accZCB, gyroXCB, gyroYCB, gyroZCB};

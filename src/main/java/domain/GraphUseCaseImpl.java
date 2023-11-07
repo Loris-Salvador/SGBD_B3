@@ -90,13 +90,4 @@ public class GraphUseCaseImpl implements GraphUseCase{
 
         repo.saveInstantane(instantane);
     }
-
-    public static void main(String[] args) {
-        LocalDateTime currentDateTime = LocalDateTime.now();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formattedDateTime = currentDateTime.format(formatter);
-
-        System.out.println("Date et heure courantes : " + formattedDateTime);
-    }
 }

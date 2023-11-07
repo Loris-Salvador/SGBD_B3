@@ -3,7 +3,7 @@ package core.model;
 public class Instantane {
 
     private String image;
-    private core.model.Jugement jugement;
+    private Jugement jugement;
     private int timeStamp;
     private String dateExpertise;
 
