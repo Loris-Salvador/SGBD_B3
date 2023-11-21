@@ -21,7 +21,6 @@ import java.util.List;
 
 import static core.constant.GraphConstant.*;
 
-
 public class MainController {
     private Thread graphThread;
     private DataSet dataSet;
@@ -244,23 +243,27 @@ public class MainController {
         NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
         yAxis.setAutoRanging(false);
 
-        double zoomFactor = 0.03; // Ajustez ce facteur selon vos besoins
+        double zoomFactor = 0.02;
 
         double axisRange = yAxis.getUpperBound() - yAxis.getLowerBound();
 
-        if (event.getDeltaY() > 0) {
+        if (event.getDeltaY() > 0 && yAxis.getUpperBound()>0.4) {
             // Zoom in
             double zoomAmount = axisRange * zoomFactor;
-            yAxis.setLowerBound(yAxis.getLowerBound() + zoomAmount);
-            yAxis.setUpperBound(yAxis.getUpperBound() - zoomAmount);
-        } else {
+
+            zoomAmount = (yAxis.getUpperBound() - zoomAmount)-(yAxis.getUpperBound() - zoomAmount)%0.1;
+            yAxis.setLowerBound(-zoomAmount);
+            yAxis.setUpperBound(zoomAmount);
+        } else if(event.getDeltaY() < 0 && yAxis.getUpperBound()>=0.4) {
             // Zoom out
             double zoomAmount = axisRange * zoomFactor;
-            yAxis.setLowerBound(yAxis.getLowerBound() - zoomAmount);
-            yAxis.setUpperBound(yAxis.getUpperBound() + zoomAmount);
+            zoomAmount = (yAxis.getUpperBound() + zoomAmount)+0.1-(yAxis.getUpperBound() + zoomAmount)%0.1;
+
+            yAxis.setLowerBound(-zoomAmount);
+            yAxis.setUpperBound(zoomAmount);
         }
 
-        yAxis.setTickUnit(axisRange / 10);
+        yAxis.setTickUnit(yAxis.getUpperBound() / 10);
     }
 
 
