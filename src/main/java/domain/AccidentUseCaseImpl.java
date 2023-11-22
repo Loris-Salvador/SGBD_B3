@@ -21,11 +21,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 
-public class GraphUseCaseImpl implements GraphUseCase{
+public class AccidentUseCaseImpl implements AccidentUseCase{
     private final DataCarRepository repo;
     private DataSet dataSet;
 
-    public GraphUseCaseImpl(DataCarRepository repo)
+    public AccidentUseCaseImpl(DataCarRepository repo)
     {
         this.repo = repo;
     }

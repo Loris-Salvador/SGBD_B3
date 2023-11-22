@@ -7,8 +7,8 @@ import static core.constant.GraphConstant.*;
 
 public class DefilementAvant extends Thread {
 
-    private MainController controller;
-    public DefilementAvant(MainController controller)
+    private AccidentController controller;
+    public DefilementAvant(AccidentController controller)
     {
         this.controller = controller;
     }

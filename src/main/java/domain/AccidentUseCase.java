@@ -8,7 +8,7 @@ import javafx.scene.chart.LineChart;
 
 import java.io.IOException;
 
-public interface GraphUseCase {
+public interface AccidentUseCase {
     public DataSet getDataSet(int timeStamp) throws DataBaseException;
     public void saveSnapShot(LineChart chart, int timeStamp, String jugement) throws SauvegardeException;
 }

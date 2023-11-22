@@ -2,7 +2,7 @@ package presentation;
 
 import core.exception.DataBaseException;
 import core.exception.SauvegardeException;
-import domain.GraphUseCase;
+import domain.AccidentUseCase;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -21,12 +21,12 @@ import java.util.List;
 
 import static core.constant.GraphConstant.*;
 
-public class MainController {
+public class AccidentController {
     private Thread graphThread;
     private DataSet dataSet;
     private int timeStamp;
     private int currentStamp;
-    private final GraphUseCase graphUseCase;
+    private final AccidentUseCase graphUseCase;
     private int multiplicateur;
     private int rafraichissement;
     @FXML
@@ -62,7 +62,7 @@ public class MainController {
     @FXML
     private TextField timeStampTextField;
 
-    public MainController(GraphUseCase graphUseCase) {
+    public AccidentController(AccidentUseCase graphUseCase) {
         this.graphUseCase = graphUseCase;
         multiplicateur = 1;
         rafraichissement = TAUX_RAFRAISHISSEMENT;
