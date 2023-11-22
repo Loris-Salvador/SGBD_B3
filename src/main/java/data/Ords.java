@@ -39,7 +39,7 @@ public class Ords implements DataCarRepository{
 
         do
         {
-            String reponse = executeRequest("http://192.168.203.142:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
+            String reponse = executeRequest("http://192.168.203.144:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
 
             try {
                 jsonNodeResponse = objectMapper.readTree(reponse);
@@ -99,7 +99,7 @@ public class Ords implements DataCarRepository{
             byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8 );
             int postDataLength = postData.length;
 
-            URL url = new URL("http://192.168.203.142:8080/ords/sgbd_b3/save_instantane/test");
+            URL url = new URL("http://192.168.203.144:8080/ords/sgbd_b3/save_instantane/test");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setDoOutput(true);

@@ -7,21 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import data.Ords;
 import presentation.AccidentController;
+import presentation.MainWindowController;
 
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Ords ords = new Ords();
-        AccidentUseCase useCase = new AccidentUseCaseImpl(ords);
-        GraphConstant.initGraphConstants();
-
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("presentation/main-window.fxml"));
-        fxmlLoader.setController(new AccidentController(useCase));
+        fxmlLoader.setController(new MainWindowController());
 
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 550);
-        scene.getStylesheets().add(getClass().getResource("style/main-window-style.css").toExternalForm());
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.setMinWidth(1050);
         stage.setMinHeight(600);
