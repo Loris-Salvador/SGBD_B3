@@ -1,14 +1,14 @@
-package presentation;
+package presentation.accident;
 
 import javafx.application.Platform;
 import javafx.scene.chart.NumberAxis;
 
 import static core.constant.GraphConstant.*;
 
-public class DefilementArriere extends Thread {
+public class DefilementAvant extends Thread {
 
     private AccidentController controller;
-    public DefilementArriere(AccidentController controller)
+    public DefilementAvant(AccidentController controller)
     {
         this.controller = controller;
     }
@@ -17,6 +17,7 @@ public class DefilementArriere extends Thread {
     public void run()
     {
         NumberAxis xAxis = (NumberAxis) controller.getLinearGraph().getXAxis();
+
         try {
             Thread.sleep(350);
         }
@@ -25,9 +26,9 @@ public class DefilementArriere extends Thread {
             e.printStackTrace();
         }
 
-        while(controller.getCurrentStamp() >= controller.getTimeStamp()-FROM_TIME) {
+        while(controller.getCurrentStamp() <= controller.getTimeStamp() - TAILLE_AXE_X) {
             try {
-                controller.setCurrentStamp(controller.getCurrentStamp() - ECHELLE);
+                controller.setCurrentStamp(controller.getCurrentStamp() + ECHELLE);
                 xAxis.setLowerBound(controller.getCurrentStamp());
                 xAxis.setUpperBound(controller.getCurrentStamp() + TAILLE_AXE_X);
                 Thread.sleep(controller.getRafraichissement());

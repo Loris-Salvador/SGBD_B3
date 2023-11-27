@@ -18,7 +18,7 @@ public class GraphConstant {
         int tauxRafraichissement = -1, fromTime = -1, echelle = -1, tailleAxeX = -1, multiplicateurMax = -1;
 
 
-        try (FileInputStream fis = new FileInputStream("config.properties")) {
+        try (FileInputStream fis = new FileInputStream("graph.properties")) {
 
             prop.load(fis);
             tauxRafraichissement = Integer.parseInt(prop.getProperty("TAUX_RAFRAICHISSEMENT"));

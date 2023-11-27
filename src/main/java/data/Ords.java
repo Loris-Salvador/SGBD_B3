@@ -10,21 +10,32 @@ import core.model.DataCar;
 import core.model.Instantane;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.swing.*;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import static core.constant.GraphConstant.FROM_TIME;
 
 public class Ords implements DataCarRepository{
+    private final String ip;
+    private final String port;
     public Ords()
     {
+        Properties prop = new Properties();
+        try (FileInputStream fis = new FileInputStream("data_base.properties")) {
+            prop.load(fis);
+        }
+        catch (IOException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Erreur lors du chargement de l'application", "Erreur", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
 
+        port = prop.getProperty("port");
+        ip = prop.getProperty("ip");
     }
 
     @Override
@@ -39,7 +50,7 @@ public class Ords implements DataCarRepository{
 
         do
         {
-            String reponse = executeRequest("http://192.168.203.144:8080/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
+            String reponse = executeRequest("http://" + ip + ":" + port + "/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
 
             try {
                 jsonNodeResponse = objectMapper.readTree(reponse);
@@ -99,7 +110,7 @@ public class Ords implements DataCarRepository{
             byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8 );
             int postDataLength = postData.length;
 
-            URL url = new URL("http://192.168.203.144:8080/ords/sgbd_b3/save_instantane/test");
+            URL url = new URL("http://" + ip + ":" + port + "/ords/sgbd_b3/save_instantane/test");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setDoOutput(true);

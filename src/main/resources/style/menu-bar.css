@@ -1,0 +1,16 @@
+.MenuButton {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 3 0;
+}
+#menuPane{
+    -fx-background-color: #CACACA;
+}
+.MenuButton:hover {
+    -fx-background-color: #A5A5A5;
+}
+.MenuButton:disabled {
+    -fx-background-color: #656565;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #000000;
+
+}

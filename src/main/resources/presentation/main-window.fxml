@@ -1,38 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <top>
-        <MenuBar>
-            <menus>
-                <Menu text="File">
-                    <items>
-                        <MenuItem text="New" />
-                        <MenuItem text="Open" />
-                        <MenuItem text="Save" />
-                        <MenuItem text="Exit" />
-                    </items>
-                </Menu>
-                <Menu text="Edit">
-                    <items>
-                        <MenuItem text="Cut" />
-                        <MenuItem text="Copy" />
-                        <MenuItem text="Paste" />
-                    </items>
-                </Menu>
-                <!-- Add more menus if needed -->
-            </menus>
-        </MenuBar>
+        <HBox fx:id="menuPane" prefHeight="33.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="accidentButton" disable="true" mnemonicParsing="false" prefHeight="33.0" prefWidth="86.0" styleClass="MenuButton" text="Accident">
+               <HBox.margin>
+                  <Insets left="3.0" />
+               </HBox.margin></Button>
+                <Button fx:id="analyseButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="82.0" styleClass="MenuButton" text="Analyse" />
+            </children></HBox>
     </top>
-    <!-- Your existing content here -->
     <center>
 
-        <Pane fx:id="scene" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="700.0">
-
-        </Pane>
-
+        <Pane fx:id="scene" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="700.0"/>
 
     </center>
 </BorderPane>

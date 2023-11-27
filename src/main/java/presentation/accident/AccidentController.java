@@ -1,4 +1,4 @@
-package presentation;
+package presentation.accident;
 
 import core.exception.DataBaseException;
 import core.exception.SauvegardeException;
