@@ -1,0 +1,11 @@
+.chart-series-line.aggressive {
+    -fx-stroke: blue;
+}
+
+.chart-series-line.normal {
+    -fx-stroke: green;
+}
+
+.chart-series-line.lent {
+    -fx-stroke: red;
+}

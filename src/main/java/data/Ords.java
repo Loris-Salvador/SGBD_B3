@@ -4,7 +4,7 @@ package data;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import core.exception.DataBaseException;
+import core.exception.GetDataException;
 import core.exception.SauvegardeException;
 import core.model.DataCar;
 import core.model.Instantane;
@@ -23,8 +23,7 @@ import static core.constant.GraphConstant.FROM_TIME;
 public class Ords implements DataCarRepository{
     private final String ip;
     private final String port;
-    public Ords()
-    {
+    public Ords() {
         Properties prop = new Properties();
         try (FileInputStream fis = new FileInputStream("data_base.properties")) {
             prop.load(fis);
@@ -39,7 +38,7 @@ public class Ords implements DataCarRepository{
     }
 
     @Override
-    public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws DataBaseException {
+    public ArrayList<DataCar> getDataFromTimeStamp(int timeStamp) throws GetDataException {
 
         ArrayList<DataCar> list = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -50,12 +49,12 @@ public class Ords implements DataCarRepository{
 
         do
         {
-            String reponse = executeRequest("http://" + ip + ":" + port + "/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
+            String reponse = executeGetRequest("http://" + ip + ":" + port + "/ords/sgbd_b3/getbetween/" + timestamp2 + "/" + timeStamp);
 
             try {
                 jsonNodeResponse = objectMapper.readTree(reponse);
             } catch (JsonProcessingException e) {
-                throw new DataBaseException("Erreur recuperation donnees");
+                throw new GetDataException("Erreur recuperation donnees");
             }
             JsonNode itemNode = jsonNodeResponse.get("items");
 
@@ -86,11 +85,11 @@ public class Ords implements DataCarRepository{
 
         if(list.isEmpty() || list.getLast().getTimeStamp() != timeStamp)
         {
-            throw new DataBaseException("TimeStamp inexistant");
+            throw new GetDataException("TimeStamp inexistant");
         }
         else if(list.getFirst().getTimeStamp() != verifyData)
         {
-            throw new DataBaseException("Pas assez de donnees");
+            throw new GetDataException("Pas assez de donnees");
         }
 
         return list;
@@ -141,9 +140,60 @@ public class Ords implements DataCarRepository{
         }
     }
 
+    @Override
+    public ArrayList<DataCar> getAllData() throws GetDataException {
+
+        ArrayList<DataCar> list = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNodeResponse;
+
+        String request = "http://" + ip + ":" + port + "/ords/sgbd_b3/get/all";
+
+        do{
+
+            String reponse = executeGetRequest(request);
+
+            try {
+                jsonNodeResponse = objectMapper.readTree(reponse);
+            } catch (JsonProcessingException e) {
+                throw new GetDataException("Erreur recuperation donnees");
+            }
+            JsonNode itemNode = jsonNodeResponse.get("items");
+
+            for(JsonNode node : itemNode)
+            {
+                DataCar dataCar = new DataCar(node);
+                list.add(dataCar);
+            }
+
+            if(jsonNodeResponse.get("hasMore").asBoolean())
+            {
+                JsonNode linkNode = jsonNodeResponse.get("links");
+
+                for(JsonNode node : linkNode)
+                {
+                    try{
+                        if(node.get("rel").asText().equals("next"))
+                        {
+                            request = node.get("href").asText();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new GetDataException("erreur recuperation hasMore");
+                    }
+                }
+            }
+        }
+        while(jsonNodeResponse.get("hasMore").asBoolean());
+
+        return list;
 
 
-    private String executeRequest(String urlRequest) throws DataBaseException {
+    }
+
+
+    private String executeGetRequest(String urlRequest) throws GetDataException {
 
         try {
         URL url = new URL(urlRequest);
@@ -168,7 +218,7 @@ public class Ords implements DataCarRepository{
         }
         catch (IOException e)
         {
-            throw new DataBaseException("Erreur recuperation donnees");
+            throw new GetDataException("Erreur recuperation donnees");
         }
 
     }

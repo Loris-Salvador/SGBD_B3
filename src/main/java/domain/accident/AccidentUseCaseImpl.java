@@ -1,6 +1,6 @@
-package domain;
+package domain.accident;
 
-import core.exception.DataBaseException;
+import core.exception.GetDataException;
 import core.exception.SauvegardeException;
 import core.model.Instantane;
 import core.model.Jugement;
@@ -9,7 +9,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import core.model.DataCar;
-import core.model.DataSet;
+import core.model.LineGraphData;
 import javafx.scene.image.WritableImage;
 import data.DataCarRepository;
 
@@ -23,7 +23,7 @@ import java.util.Base64;
 
 public class AccidentUseCaseImpl implements AccidentUseCase{
     private final DataCarRepository repo;
-    private DataSet dataSet;
+    private LineGraphData lineGraphData;
 
     public AccidentUseCaseImpl(DataCarRepository repo)
     {
@@ -31,11 +31,11 @@ public class AccidentUseCaseImpl implements AccidentUseCase{
     }
 
     @Override
-    public DataSet getDataSet(int stamp) throws DataBaseException {
+    public LineGraphData getDataSet(int stamp) throws GetDataException {
 
         ArrayList<DataCar> dataCar = repo.getDataFromTimeStamp(stamp);
 
-        dataSet = new DataSet();
+        lineGraphData = new LineGraphData();
         double tmp = -1;
 
         for(DataCar data : dataCar)
@@ -45,17 +45,17 @@ public class AccidentUseCaseImpl implements AccidentUseCase{
             {
                 timeStamp = timeStamp + 0.5;
             }
-            dataSet.getAccX().getData().add(new XYChart.Data<>(timeStamp, data.getAccX()));
-            dataSet.getAccY().getData().add(new XYChart.Data<>(timeStamp, data.getAccY()));
-            dataSet.getAccZ().getData().add(new XYChart.Data<>(timeStamp, data.getAccZ()));
-            dataSet.getGyroX().getData().add(new XYChart.Data<>(timeStamp, data.getGyroX()));
-            dataSet.getGyroY().getData().add(new XYChart.Data<>(timeStamp, data.getGyroY()));
-            dataSet.getGyroZ().getData().add(new XYChart.Data<>(timeStamp, data.getGyroZ()));
+            lineGraphData.getAccX().getData().add(new XYChart.Data<>(timeStamp, data.getAccX()));
+            lineGraphData.getAccY().getData().add(new XYChart.Data<>(timeStamp, data.getAccY()));
+            lineGraphData.getAccZ().getData().add(new XYChart.Data<>(timeStamp, data.getAccZ()));
+            lineGraphData.getGyroX().getData().add(new XYChart.Data<>(timeStamp, data.getGyroX()));
+            lineGraphData.getGyroY().getData().add(new XYChart.Data<>(timeStamp, data.getGyroY()));
+            lineGraphData.getGyroZ().getData().add(new XYChart.Data<>(timeStamp, data.getGyroZ()));
 
             tmp = timeStamp;
         }
 
-        return dataSet;
+        return lineGraphData;
     }
     @Override
     public void saveSnapShot(LineChart chart, int timeStamp, String jugementStr) throws SauvegardeException

@@ -1,15 +1,15 @@
 package presentation.accident;
 
-import core.exception.DataBaseException;
+import core.exception.GetDataException;
 import core.exception.SauvegardeException;
-import domain.AccidentUseCase;
+import domain.accident.AccidentUseCase;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import core.model.DataSet;
+import core.model.LineGraphData;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -23,7 +23,7 @@ import static core.constant.GraphConstant.*;
 
 public class AccidentController {
     private Thread graphThread;
-    private DataSet dataSet;
+    private LineGraphData lineGraphData;
     private int timeStamp;
     private int currentStamp;
     private final AccidentUseCase graphUseCase;
@@ -68,19 +68,19 @@ public class AccidentController {
         rafraichissement = TAUX_RAFRAISHISSEMENT;
     }
     @FXML
-    public void initialize() {
+    private void initialize() {
         timeStampTextField.setOnAction(event -> afficherGraphique());
         pauseButton.setOnAction(event -> pauseButtonClick());
         avancerButton.setOnAction(event -> avancerButtonClick());
         reculerButton.setOnAction(event -> reculerButtonClick());
         sauvegarderButton.setOnAction(event -> sauvegarderButtonClick());
         multiplicateurButton.setOnAction(event -> multiplicateurButtonClick());
-        accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accXCB, dataSet.getAccX()));
-        accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accYCB, dataSet.getAccY()));
-        accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accZCB, dataSet.getAccZ()));
-        gyroXCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroXCB, dataSet.getGyroX()));
-        gyroYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroYCB, dataSet.getGyroY()));
-        gyroZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroZCB, dataSet.getGyroZ()));
+        accXCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accXCB, lineGraphData.getAccX()));
+        accYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accYCB, lineGraphData.getAccY()));
+        accZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(accZCB, lineGraphData.getAccZ()));
+        gyroXCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroXCB, lineGraphData.getGyroX()));
+        gyroYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroYCB, lineGraphData.getGyroY()));
+        gyroZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroZCB, lineGraphData.getGyroZ()));
         nodeCB.selectedProperty().addListener((observable, oldValue, newValue) ->  NodeVisibility(newValue));
     }
 
@@ -89,17 +89,17 @@ public class AccidentController {
             graphThread.interrupt();
         try
         {
-            dataSet = graphUseCase.getDataSet(Integer.parseInt(timeStampTextField.getText()));
+            lineGraphData = graphUseCase.getDataSet(Integer.parseInt(timeStampTextField.getText()));
             linearGraph.getData().removeAll();
             linearGraph.getData().clear();
 
             linearGraph.getData().addAll(
-                    dataSet.getAccX(),
-                    dataSet.getAccY(),
-                    dataSet.getAccZ(),
-                    dataSet.getGyroX(),
-                    dataSet.getGyroY(),
-                    dataSet.getGyroZ()
+                    lineGraphData.getAccX(),
+                    lineGraphData.getAccY(),
+                    lineGraphData.getAccZ(),
+                    lineGraphData.getGyroX(),
+                    lineGraphData.getGyroY(),
+                    lineGraphData.getGyroZ()
             );
 
             timeStamp = Integer.parseInt(timeStampTextField.getText());
@@ -141,7 +141,7 @@ public class AccidentController {
             linearGraph.setOnScroll(event -> zoomOnGraph(event));
 
         }
-        catch (DataBaseException e)
+        catch (GetDataException e)
         {
             afficherInfoLabel(e.getMessage(), false);
         }
@@ -269,7 +269,7 @@ public class AccidentController {
 
     private void NodeVisibility(boolean choix) {
         CheckBox[] checkBoxes = {accXCB, accYCB, accZCB, gyroXCB, gyroYCB, gyroZCB};
-        List<XYChart.Series<Number, Double>> seriesList = Arrays.asList(dataSet.getAccX(), dataSet.getAccY(), dataSet.getAccZ(), dataSet.getGyroX(), dataSet.getGyroY(), dataSet.getGyroZ());
+        List<XYChart.Series<Number, Double>> seriesList = Arrays.asList(lineGraphData.getAccX(), lineGraphData.getAccY(), lineGraphData.getAccZ(), lineGraphData.getGyroX(), lineGraphData.getGyroY(), lineGraphData.getGyroZ());
 
         for (int i = 0; i < checkBoxes.length; i++) {
             if (checkBoxes[i].isSelected()) {
