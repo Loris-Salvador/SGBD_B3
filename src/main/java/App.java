@@ -1,3 +1,4 @@
+import core.model.BarChartData;
 import di.AppModule;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

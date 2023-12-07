@@ -1,6 +1,5 @@
 package presentation;
 
-import core.constant.GraphConstant;
 import di.AppModule;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,8 +54,6 @@ public class MainWindowController {
 
     private void initializeAccidentView() {
         try {
-            GraphConstant.initGraphConstants();
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("accident-view.fxml"));
             loader.setController(new AccidentController(module.getAccidentUseCase()));
             accidentView = loader.load();

@@ -1,11 +1,10 @@
 package domain.analyse;
 
-import core.exception.GetDataException;
-import core.model.AreaChartData;
-import javafx.scene.chart.XYChart;
 
-import java.util.ArrayList;
+import core.exception.GetDataException;
+import core.model.BarChartData;
 
 public interface AnalyseUseCase {
-    AreaChartData getGraphData() throws GetDataException;
+    BarChartData getBarChartData() throws GetDataException;
+
 }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import core.exception.GetDataException;
 import core.exception.SauvegardeException;
 import core.model.DataCar;
+import core.model.ExtremeData;
 import core.model.Instantane;
 import org.json.JSONObject;
 
@@ -190,6 +191,44 @@ public class Ords implements DataCarRepository{
         return list;
 
 
+    }
+
+    @Override
+    public ExtremeData getExtremeData() throws GetDataException {
+        ExtremeData extremeData = new ExtremeData();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNodeResponse;
+
+        String request = "http://" + ip + ":" + port + "/ords/sgbd_b3/getdata/extreme";
+
+        String reponse = executeGetRequest(request);
+
+        try {
+            jsonNodeResponse = objectMapper.readTree(reponse);
+        } catch (JsonProcessingException e) {
+            throw new GetDataException("Erreur recuperation donnees");
+        }
+
+        JsonNode itemNode = jsonNodeResponse.get("items");
+        JsonNode minNode = jsonNodeResponse.get("min");
+        JsonNode maxNode = jsonNodeResponse.get("max");
+
+        try {
+            extremeData.setDataMin(objectMapper.treeToValue(minNode, ExtremeData.DataMin.class));
+        }
+        catch (JsonProcessingException e){
+            throw new GetDataException("Erreur Conversion Json Min");
+        }
+
+        try {
+            extremeData.setDataMax(objectMapper.treeToValue(minNode, ExtremeData.DataMax.class));
+        }
+        catch (JsonProcessingException e){
+            throw new GetDataException("Erreur Conversion Json Max");
+        }
+
+        return extremeData;
     }
 
 

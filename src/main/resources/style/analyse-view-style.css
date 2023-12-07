@@ -2,7 +2,7 @@
     -fx-stroke: blue;
 }
 
-.chart-series-line.normal {
+.chart-series-line.serie {
     -fx-stroke: green;
 }
 

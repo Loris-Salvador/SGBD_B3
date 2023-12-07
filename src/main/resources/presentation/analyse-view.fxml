@@ -12,13 +12,13 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <AreaChart fx:id="areaGraph" GridPane.columnIndex="1">
+      <BarChart fx:id="barChart" GridPane.columnIndex="1">
         <xAxis>
-          <NumberAxis side="BOTTOM" autoRanging="false" forceZeroInRange="false" />
+          <CategoryAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis side="LEFT" />
         </yAxis>
-      </AreaChart>
+      </BarChart>
    </children>
 </GridPane>
