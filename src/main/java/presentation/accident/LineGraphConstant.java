@@ -1,11 +1,6 @@
-package core.constant;
+package presentation.accident;
 
-import javax.swing.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
-public class GraphConstant {
+public class LineGraphConstant {
     public static final int TAUX_RAFRAISHISSEMENT = 500; //milliseconde
     public static final int FROM_TIME = 60;
     public static final int ECHELLE = 1;

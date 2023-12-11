@@ -3,7 +3,7 @@ package presentation.accident;
 import javafx.application.Platform;
 import javafx.scene.chart.NumberAxis;
 
-import static core.constant.GraphConstant.*;
+import static presentation.accident.LineGraphConstant.*;
 
 public class DefilementAvant extends Thread {
 

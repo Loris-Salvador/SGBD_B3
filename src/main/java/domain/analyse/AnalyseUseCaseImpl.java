@@ -25,18 +25,12 @@ public class AnalyseUseCaseImpl implements AnalyseUseCase {
     }
 
     @Override
-    public BarChartData getBarChartData() throws GetDataException {
+    public void getBarChartData() throws GetDataException {
 
         extremeData = repository.getExtremeData();
         extremeData = extremeData.getCeilValue();
 
         dataCars = repository.getAllData();
-
-        BarChartData barChartData;
-
-        barChartData = graphWithEchelle(2);
-
-        return barChartData;
     }
 
     @Override

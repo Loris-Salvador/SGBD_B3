@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import static core.constant.GraphConstant.FROM_TIME;
+import static presentation.accident.LineGraphConstant.FROM_TIME;
 
 public class Ords implements DataCarRepository{
     private final String ip;

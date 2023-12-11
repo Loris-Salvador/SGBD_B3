@@ -15,3 +15,9 @@
     -fx-font-size: 20;
     -fx-font-weight: bold; /* Utilisation du poids de police "bold" pour mettre en gras */
 }
+
+
+
+.default-color0.chart-bar { -fx-bar-fill: "#2B8AB9" }
+.default-color1.chart-bar { -fx-bar-fill: "#2BB93A" }
+.default-color2.chart-bar { -fx-bar-fill: "#FF1313" }

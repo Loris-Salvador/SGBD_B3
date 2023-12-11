@@ -32,7 +32,7 @@
             <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-             <Slider fx:id="slider" blockIncrement="1.0" majorTickUnit="1.0" max="200.0" min="2.0" snapToTicks="true" value="2.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+             <Slider fx:id="slider" blockIncrement="1.0" majorTickUnit="1.0" max="200.0" min="2.0" snapToTicks="true" value="12.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                  <GridPane.margin>
                      <Insets left="20.0" right="20.0" />
                  </GridPane.margin>

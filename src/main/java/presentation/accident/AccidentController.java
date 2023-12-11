@@ -22,7 +22,7 @@ import javafx.util.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-import static core.constant.GraphConstant.*;
+import static presentation.accident.LineGraphConstant.*;
 
 public class AccidentController {
     private Thread graphThread;

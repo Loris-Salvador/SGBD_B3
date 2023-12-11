@@ -1,17 +1,12 @@
 package presentation.analyse;
 
-import core.exception.GetDataException;
 import core.model.BarChartData;
 import domain.analyse.AnalyseUseCase;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.StackedBarChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-
-import javax.swing.plaf.basic.BasicButtonUI;
 
 
 public class AnalyseController {
@@ -53,6 +48,8 @@ public class AnalyseController {
         gyroYButton.setOnAction(event -> onButtonGraphClicked(event.getSource()));
         gyroZButton.setOnAction(event -> onButtonGraphClicked(event.getSource()));
 
+        echelleLabel.setText(String.valueOf((int)slider.getValue()));
+
         initializeGraph();
 
     }
@@ -75,14 +72,8 @@ public class AnalyseController {
         barChart.setAnimated(false);
         barChart.setCategoryGap(0);
 
+        data = useCase.graphWithEchelle(12);
 
-        try {
-            data = useCase.getBarChartData();
-        }
-        catch (GetDataException e)
-        {
-            e.printStackTrace();
-        }
 
         for(int i = 0; i < data.getSerie(0).getDataSerie().size(); i++)
         {
@@ -101,77 +92,30 @@ public class AnalyseController {
     }
 
     private void changeGraph(){
+
+        barChart.getData().removeAll();
+        barChart.getData().clear();
+
+        data = useCase.graphWithEchelle((int)slider.getValue());
+
+        int indice = -1;
+
         if(currentButton.equals(accXButton))
-        {
-            barChart.getData().removeAll();
-            barChart.getData().clear();
-
-            data = useCase.graphWithEchelle((int)slider.getValue());
-
-            for(int i = 0; i < data.getSerie(0).getDataSerie().size(); i++)
-            {
-                barChart.getData().add(data.getSerie(0).getDataSerie().get(i));
-            }
-        }
+            indice = 0;
         else if(currentButton.equals(accYButton))
-        {
-            barChart.getData().removeAll();
-            barChart.getData().clear();
-
-            data = useCase.graphWithEchelle((int)slider.getValue());
-
-            for(int i = 0; i < data.getSerie(1).getDataSerie().size(); i++)
-            {
-                barChart.getData().add(data.getSerie(1).getDataSerie().get(i));
-            }
-        }
+            indice = 1;
         else if(currentButton.equals(accZButton))
-        {
-            barChart.getData().removeAll();
-            barChart.getData().clear();
-
-            data = useCase.graphWithEchelle((int)slider.getValue());
-
-            for(int i = 0; i < data.getSerie(2).getDataSerie().size(); i++)
-            {
-                barChart.getData().add(data.getSerie(2).getDataSerie().get(i));
-            }
-        }
+            indice = 2;
         else if(currentButton.equals(gyroXButton))
-        {
-            barChart.getData().removeAll();
-            barChart.getData().clear();
-
-            data = useCase.graphWithEchelle((int)slider.getValue());
-
-            for(int i = 0; i < data.getSerie(3).getDataSerie().size(); i++)
-            {
-                barChart.getData().add(data.getSerie(3).getDataSerie().get(i));
-            }
-        }
+            indice = 3;
         else if(currentButton.equals(gyroYButton))
-        {
-            barChart.getData().removeAll();
-            barChart.getData().clear();
-
-            data = useCase.graphWithEchelle((int)slider.getValue());
-
-            for(int i = 0; i < data.getSerie(4).getDataSerie().size(); i++)
-            {
-                barChart.getData().add(data.getSerie(4).getDataSerie().get(i));
-            }
-        }
+            indice = 4;
         else
+            indice = 5;
+
+        for(int i = 0; i < data.getSerie(indice).getDataSerie().size(); i++)
         {
-            barChart.getData().removeAll();
-            barChart.getData().clear();
-
-            data = useCase.graphWithEchelle((int)slider.getValue());
-
-            for(int i = 0; i < data.getSerie(5).getDataSerie().size(); i++)
-            {
-                barChart.getData().add(data.getSerie(5).getDataSerie().get(i));
-            }
+            barChart.getData().add(data.getSerie(indice).getDataSerie().get(i));
         }
     }
 
