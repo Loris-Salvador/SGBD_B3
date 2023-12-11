@@ -1,9 +1,7 @@
-import core.model.BarChartData;
 import di.AppModule;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import presentation.MainWindowController;
 

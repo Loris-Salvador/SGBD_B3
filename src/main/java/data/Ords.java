@@ -202,34 +202,49 @@ public class Ords implements DataCarRepository{
 
         String request = "http://" + ip + ":" + port + "/ords/sgbd_b3/getdata/extreme";
 
-        String reponse = executeGetRequest(request);
+        String response = executeGetRequest(request);
 
         try {
-            jsonNodeResponse = objectMapper.readTree(reponse);
+            jsonNodeResponse = objectMapper.readTree(response);
         } catch (JsonProcessingException e) {
-            throw new GetDataException("Erreur recuperation donnees");
+            throw new GetDataException("Erreur lors de la récupération des données");
         }
 
         JsonNode itemNode = jsonNodeResponse.get("items");
-        JsonNode minNode = jsonNodeResponse.get("min");
-        JsonNode maxNode = jsonNodeResponse.get("max");
 
-        try {
-            extremeData.setDataMin(objectMapper.treeToValue(minNode, ExtremeData.DataMin.class));
-        }
-        catch (JsonProcessingException e){
-            throw new GetDataException("Erreur Conversion Json Min");
-        }
+        if (itemNode.isArray() && itemNode.size() > 0) {
+            JsonNode firstItem = itemNode.get(0);
 
-        try {
-            extremeData.setDataMax(objectMapper.treeToValue(minNode, ExtremeData.DataMax.class));
-        }
-        catch (JsonProcessingException e){
-            throw new GetDataException("Erreur Conversion Json Max");
+            try {
+                ExtremeData.DataMin dataMin = extremeData.new DataMin();
+                ExtremeData.DataMax dataMax = extremeData.new DataMax();
+
+                dataMin.setAccX(firstItem.get("min(accx)").asDouble());
+                dataMin.setAccY(firstItem.get("min(accy)").asDouble());
+                dataMin.setAccZ(firstItem.get("min(accz)").asDouble());
+                dataMin.setGyroX(firstItem.get("min(gyrox)").asDouble());
+                dataMin.setGyroY(firstItem.get("min(gyroy)").asDouble());
+                dataMin.setGyroZ(firstItem.get("min(gyroz)").asDouble());
+
+                dataMax.setAccX(firstItem.get("max(accx)").asDouble());
+                dataMax.setAccY(firstItem.get("max(accy)").asDouble());
+                dataMax.setAccZ(firstItem.get("max(accz)").asDouble());
+                dataMax.setGyroX(firstItem.get("max(gyrox)").asDouble());
+                dataMax.setGyroY(firstItem.get("max(gyroy)").asDouble());
+                dataMax.setGyroZ(firstItem.get("max(gyroz)").asDouble());
+
+                extremeData.setDataMin(dataMin);
+                extremeData.setDataMax(dataMax);
+            } catch (Exception e) {
+                throw new GetDataException("Erreur lors de l'extraction ou de l'affectation des valeurs");
+            }
+        } else {
+            throw new GetDataException("Aucune donnée trouvée");
         }
 
         return extremeData;
     }
+
 
 
     private String executeGetRequest(String urlRequest) throws GetDataException {

@@ -14,10 +14,10 @@
    <children>
       <BarChart fx:id="barChart" GridPane.columnIndex="1">
         <xAxis>
-          <CategoryAxis side="BOTTOM" />
+          <CategoryAxis side="BOTTOM" autoRanging="true"/>
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" />
+          <NumberAxis side="LEFT" autoRanging="true" />
         </yAxis>
       </BarChart>
    </children>

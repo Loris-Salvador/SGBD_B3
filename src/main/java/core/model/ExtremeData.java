@@ -28,17 +28,11 @@ public class ExtremeData {
     }
 
     public class DataMin {
-        @JsonProperty("accx")
         private double accX;
-        @JsonProperty("accy")
         private double accY;
-        @JsonProperty("accz")
         private double accZ;
-        @JsonProperty("gyrox")
         private double gyroX;
-        @JsonProperty("gyroy")
         private double gyroY;
-        @JsonProperty("gyroz")
         private double gyroZ;
 
         public double getAccX() {
@@ -87,21 +81,27 @@ public class ExtremeData {
 
         public void setGyroZ(double gyroZ) {
             this.gyroZ = gyroZ;
+        }
+
+        @Override
+        public String toString() {
+            return "DataMin{" +
+                    "accX=" + accX +
+                    ", accY=" + accY +
+                    ", accZ=" + accZ +
+                    ", gyroX=" + gyroX +
+                    ", gyroY=" + gyroY +
+                    ", gyroZ=" + gyroZ +
+                    '}';
         }
     }
 
     public class DataMax {
-        @JsonProperty("accx")
         private double accX;
-        @JsonProperty("accy")
         private double accY;
-        @JsonProperty("accz")
         private double accZ;
-        @JsonProperty("gyrox")
         private double gyroX;
-        @JsonProperty("gyroy")
         private double gyroY;
-        @JsonProperty("gyroz")
         private double gyroZ;
 
         public double getAccX() {
@@ -151,6 +151,43 @@ public class ExtremeData {
         public void setGyroZ(double gyroZ) {
             this.gyroZ = gyroZ;
         }
+
+        @Override
+        public String toString() {
+            return "DataMax{" +
+                    "accX=" + accX +
+                    ", accY=" + accY +
+                    ", accZ=" + accZ +
+                    ", gyroX=" + gyroX +
+                    ", gyroY=" + gyroY +
+                    ", gyroZ=" + gyroZ +
+                    '}';
+        }
     }
 
+    @Override
+    public String toString() {
+        return "ExtremeData{" +
+                "dataMin=" + dataMin.toString() +
+                ", dataMax=" + dataMax.toString() +
+                '}';
+    }
+
+    public ExtremeData getCeilValue()
+    {
+        ExtremeData tmp = new ExtremeData();
+        tmp.getDataMin().setAccX(Math.floor(dataMin.getAccX()));
+        tmp.getDataMin().setAccY(Math.floor(dataMin.getAccY()));
+        tmp.getDataMin().setAccZ(Math.floor(dataMin.getAccZ()));
+        tmp.getDataMin().setGyroX(Math.floor(dataMin.getGyroX()));
+        tmp.getDataMin().setGyroY(Math.floor(dataMin.getGyroY()));
+        tmp.getDataMin().setGyroZ(Math.floor(dataMin.getGyroZ()));
+        tmp.getDataMax().setAccX(Math.ceil(dataMax.getAccX()));
+        tmp.getDataMax().setAccY(Math.ceil(dataMax.getAccY()));
+        tmp.getDataMax().setAccZ(Math.ceil(dataMax.getAccZ()));
+        tmp.getDataMax().setGyroX(Math.ceil(dataMax.getGyroX()));
+        tmp.getDataMax().setGyroY(Math.ceil(dataMax.getGyroY()));
+        tmp.getDataMax().setGyroZ(Math.ceil(dataMax.getGyroZ()));
+        return tmp;
+    }
 }

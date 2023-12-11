@@ -3,7 +3,8 @@ package presentation.accident;
 import core.exception.GetDataException;
 import core.exception.SauvegardeException;
 import domain.accident.AccidentUseCase;
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -14,7 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +32,11 @@ public class AccidentController {
     private final AccidentUseCase graphUseCase;
     private int multiplicateur;
     private int rafraichissement;
+    private Timeline colorChangeTimeline;
+    @FXML
+    private Circle loading;
+    @FXML
+    GridPane mainPane;
     @FXML
     private ComboBox jugementComboBox;
     @FXML
@@ -82,73 +90,110 @@ public class AccidentController {
         gyroYCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroYCB, lineGraphData.getGyroY()));
         gyroZCB.selectedProperty().addListener((observable, oldValue, newValue) -> checkBoxesChange(gyroZCB, lineGraphData.getGyroZ()));
         nodeCB.selectedProperty().addListener((observable, oldValue, newValue) ->  NodeVisibility(newValue));
+
+        initializeLoadingCircle();
     }
+
+    private void initializeLoadingCircle() {
+        loading.setFill(Color.TRANSPARENT);
+        loading.setStroke(Color.TRANSPARENT);
+
+        Color[] colors = {Color.valueOf("#74E0E5"), Color.valueOf("#A8E1E3")};
+
+        colorChangeTimeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(loading.fillProperty(), colors[0])),
+                new KeyFrame(Duration.seconds(0.2), new KeyValue(loading.fillProperty(), colors[1])),
+                new KeyFrame(Duration.seconds(0.4), new KeyValue(loading.fillProperty(), colors[0]))
+        );
+        colorChangeTimeline.setCycleCount(Timeline.INDEFINITE);
+    }
+
 
     private void afficherGraphique() {
         if(graphThread != null && graphThread.isAlive())
             graphThread.interrupt();
-        try
-        {
-            lineGraphData = graphUseCase.getDataSet(Integer.parseInt(timeStampTextField.getText()));
-            linearGraph.getData().removeAll();
-            linearGraph.getData().clear();
 
-            linearGraph.getData().addAll(
-                    lineGraphData.getAccX(),
-                    lineGraphData.getAccY(),
-                    lineGraphData.getAccZ(),
-                    lineGraphData.getGyroX(),
-                    lineGraphData.getGyroY(),
-                    lineGraphData.getGyroZ()
-            );
+        loading.setVisible(true);
+        colorChangeTimeline.play();
 
-            timeStamp = Integer.parseInt(timeStampTextField.getText());
-            currentStamp = timeStamp - FROM_TIME;
-            NumberAxis xAxis = (NumberAxis) linearGraph.getXAxis();
-            NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
-            yAxis.setAutoRanging(false);
-            yAxis.setLowerBound(-3);
-            yAxis.setUpperBound(3);
-            yAxis.setTickUnit(1);
-            xAxis.setAutoRanging(false);
-            xAxis.setTickUnit(ECHELLE);
-            xAxis.setLowerBound(currentStamp-ECHELLE);
-            xAxis.setUpperBound(currentStamp+TAILLE_AXE_X);
-            setCheckBoxesVisibility(true);
 
-            if(infoLabel.isVisible())
-            {
-                infoLabel.setVisible(false);
-            }
-            avancerButton.setVisible(true);
-            avancerButton.setDisable(false);
-            multiplicateurButton.setVisible(true);
-            reculerButton.setVisible(true);
-            reculerButton.setDisable(true);
-            pauseButton.setVisible(true);
-            pauseButton.setDisable(true);
-            jugementComboBox.setVisible(true);
-            sauvegarderButton.setVisible(true);
 
-            accXCB.setSelected(true);
-            accYCB.setSelected(true);
-            accZCB.setSelected(true);
-            gyroXCB.setSelected(true);
-            gyroYCB.setSelected(true);
-            gyroZCB.setSelected(true);
-            nodeCB.setSelected(true);
+        new Thread(() -> {
+                try
+                {
+                lineGraphData = graphUseCase.getDataSet(Integer.parseInt(timeStampTextField.getText()));
 
-            linearGraph.setOnScroll(event -> zoomOnGraph(event));
+                Platform.runLater(() ->{
+                    linearGraph.getData().removeAll();
+                    linearGraph.getData().clear();
 
-        }
-        catch (GetDataException e)
-        {
-            afficherInfoLabel(e.getMessage(), false);
-        }
-        catch (NumberFormatException e)
-        {
-            afficherInfoLabel("Veuillez entrer un timeStamp valide", false);
-        }
+
+
+                    timeStamp = Integer.parseInt(timeStampTextField.getText());
+                    currentStamp = timeStamp - FROM_TIME;
+                    NumberAxis xAxis = (NumberAxis) linearGraph.getXAxis();
+                    NumberAxis yAxis = (NumberAxis) linearGraph.getYAxis();
+                    yAxis.setAutoRanging(false);
+                    yAxis.setLowerBound(-3);
+                    yAxis.setUpperBound(3);
+                    yAxis.setTickUnit(1);
+                    xAxis.setAutoRanging(false);
+                    xAxis.setTickUnit(ECHELLE);
+                    xAxis.setLowerBound(currentStamp-ECHELLE);
+                    xAxis.setUpperBound(currentStamp+TAILLE_AXE_X);
+                    setCheckBoxesVisibility(true);
+
+                    if(infoLabel.isVisible())
+                    {
+                        infoLabel.setVisible(false);
+                    }
+                    avancerButton.setVisible(true);
+                    avancerButton.setDisable(false);
+                    multiplicateurButton.setVisible(true);
+                    reculerButton.setVisible(true);
+                    reculerButton.setDisable(true);
+                    pauseButton.setVisible(true);
+                    pauseButton.setDisable(true);
+                    jugementComboBox.setVisible(true);
+                    sauvegarderButton.setVisible(true);
+
+                    accXCB.setSelected(true);
+                    accYCB.setSelected(true);
+                    accZCB.setSelected(true);
+                    gyroXCB.setSelected(true);
+                    gyroYCB.setSelected(true);
+                    gyroZCB.setSelected(true);
+                    nodeCB.setSelected(true);
+
+                    linearGraph.getData().addAll(
+                            lineGraphData.getAccX(),
+                            lineGraphData.getAccY(),
+                            lineGraphData.getAccZ(),
+                            lineGraphData.getGyroX(),
+                            lineGraphData.getGyroY(),
+                            lineGraphData.getGyroZ()
+                    );
+
+                    linearGraph.setOnScroll(event -> zoomOnGraph(event));
+
+                });
+                }
+                catch (GetDataException e)
+                {
+                    Platform.runLater(()->{
+                        afficherInfoLabel(e.getMessage(), false);
+                    });                }
+                catch (NumberFormatException e)
+                {
+                    Platform.runLater(()->{
+                        afficherInfoLabel("Veuillez entrer un timeStamp valide", false);
+                    });
+                }
+                finally {
+                    loading.setVisible(false);
+                    colorChangeTimeline.stop();
+                }
+            }).start();
     }
 
     private void pauseButtonClick() {
