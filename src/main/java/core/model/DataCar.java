@@ -91,4 +91,17 @@ public class DataCar {
                 '}';
     }
 
+    public double getData(int i)
+    {
+        return switch (i) {
+            case 0 -> accX;
+            case 1 -> accY;
+            case 2 -> accZ;
+            case 3 -> gyroX;
+            case 4 -> gyroY;
+            case 5 -> gyroZ;
+            default -> accX;
+        };
+    }
+
 }

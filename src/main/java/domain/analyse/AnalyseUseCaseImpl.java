@@ -2,11 +2,13 @@ package domain.analyse;
 
 import core.exception.GetDataException;
 import core.model.BarChartData;
+import core.model.Class;
 import core.model.DataCar;
 import core.model.ExtremeData;
 import data.DataCarRepository;
 import javafx.scene.chart.XYChart;
 
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,33 +31,66 @@ public class AnalyseUseCaseImpl implements AnalyseUseCase {
         extremeData = extremeData.getCeilValue();
 
         dataCars = repository.getAllData();
-        Collections.sort(dataCars, Comparator.comparingDouble(DataCar::getAccX));
+
+        BarChartData barChartData;
+
+        barChartData = graphWithEchelle(2);
+
+        return barChartData;
+    }
+
+    @Override
+    public BarChartData graphWithEchelle(int division){
+
 
         BarChartData barChartData = new BarChartData();
 
-        double echelle = (extremeData.getDataMax().getAccX() - extremeData.getDataMin().getAccX()) / 5;
-
-        double echelleTmp = echelle;
-
-        int i = 0;
-        while(i<dataCars.size())
+        for(int j = 0; j<6; j++)
         {
-            XYChart.Series<String, Number> serie = new XYChart.Series<String, Number>();
-            int compteur = 0;
-            while(i < dataCars.size() && dataCars.get(i).getAccX() <= extremeData.getDataMin().getAccX() + echelleTmp)
+            int finalJ = j;
+            Collections.sort(dataCars, Comparator.comparingDouble(dataCar -> dataCar.getData(finalJ)));
+
+            double echelle = (extremeData.getDataMax(j) - extremeData.getDataMin(j)) / division;
+
+            double echelleTmp = echelle;
+
+            int i = 0;
+
+            XYChart.Series<String, Number> serieSlow = new XYChart.Series<String, Number>();
+            serieSlow.setName("Slow");
+            XYChart.Series<String, Number> serieNormal = new XYChart.Series<String, Number>();
+            serieNormal.setName("Normal");
+            XYChart.Series<String, Number> serieAggressive = new XYChart.Series<String, Number>();
+            serieAggressive.setName("Aggressive");
+            while(i<dataCars.size())
             {
-                compteur ++;
-                i++;
+                int compteurSlow = 0;
+                int compteurNormal = 0;
+                int compteurAggressive = 0;
+                while(i < dataCars.size() && dataCars.get(i).getData(j) <= extremeData.getDataMin(j) + echelleTmp)
+                {
+                    if(dataCars.get(i).getClasse() == Class.SLOW)
+                        compteurSlow++;
+                    else if(dataCars.get(i).getClasse() == Class.NORMAL)
+                        compteurNormal++;
+                    else
+                        compteurAggressive++;
+                    i++;
+                }
+
+                String valeurMin = String.format("%.2f", extremeData.getDataMin(j) + echelleTmp - echelle);
+                String valeurMax = String.format("%.2f", extremeData.getDataMin(j) + echelleTmp);
+
+                serieSlow.getData().add(new XYChart.Data<>(valeurMin + " à " + valeurMax, compteurSlow));
+                serieNormal.getData().add(new XYChart.Data<>(valeurMin + " à " + valeurMax, compteurNormal));
+                serieAggressive.getData().add(new XYChart.Data<>(valeurMin + " à " + valeurMax, compteurAggressive));
+
+                echelleTmp = echelleTmp + echelle;
             }
 
-            String valeurMin = String.format("%.2f", extremeData.getDataMin().getAccX() + echelleTmp - echelle);
-            String valeurMax = String.format("%.2f", extremeData.getDataMin().getAccX() + echelleTmp);
-
-            serie.getData().add(new XYChart.Data<>(valeurMin + " à " + valeurMax, compteur));
-
-
-            echelleTmp = echelleTmp + echelle;
-            barChartData.getSerieAccX().addData(serie);
+            barChartData.getSerie(j).addData(serieSlow);
+            barChartData.getSerie(j).addData(serieNormal);
+            barChartData.getSerie(j).addData(serieAggressive);
         }
 
         return barChartData;

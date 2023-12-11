@@ -35,27 +35,18 @@ public class BarChartData {
         }
     }
 
-    public Serie getSerieAccX() {
-        return serieAccX;
+    public Serie getSerie(int i) {
+        return switch (i) {
+            case 0 -> serieAccX;
+            case 1 -> serieAccY;
+            case 2 -> serieAccZ;
+            case 3 -> serieGyroX;
+            case 4 -> serieGyroY;
+            case 5 -> serieGyroZ;
+            default -> serieAccX;
+        };
     }
 
-    public Serie getSerieAccY() {
-        return serieAccY;
-    }
 
-    public Serie getSerieAccZ() {
-        return serieAccZ;
-    }
 
-    public Serie getSerieGyroX() {
-        return serieGyroX;
-    }
-
-    public Serie getSerieGyroY() {
-        return serieGyroY;
-    }
-
-    public Serie getSerieGyroZ() {
-        return serieGyroZ;
-    }
 }

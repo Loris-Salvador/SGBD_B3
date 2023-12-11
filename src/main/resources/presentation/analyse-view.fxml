@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
@@ -12,13 +14,56 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <BarChart fx:id="barChart" GridPane.columnIndex="1">
+      <StackedBarChart fx:id="barChart" GridPane.columnIndex="1">
         <xAxis>
-          <CategoryAxis side="BOTTOM" autoRanging="true"/>
+          <CategoryAxis autoRanging="true" side="BOTTOM" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" autoRanging="true" />
+          <NumberAxis autoRanging="true" side="LEFT" />
         </yAxis>
-      </BarChart>
+      </StackedBarChart>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" percentHeight="12.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+             <Slider fx:id="slider" blockIncrement="1.0" majorTickUnit="1.0" max="200.0" min="2.0" snapToTicks="true" value="2.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                 <GridPane.margin>
+                     <Insets left="20.0" right="20.0" />
+                 </GridPane.margin>
+             </Slider>
+
+            <Label fx:id="echelleLabel" alignment="TOP_CENTER" text="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+            <GridPane alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <GridPane.margin>
+                  <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+               </GridPane.margin>
+               <children>
+                  <Button fx:id="accZButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="buttonClass" text="AccZ" GridPane.rowIndex="2" />
+                  <Button fx:id="accXButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="buttonClass" text="AccX" />
+                  <Button fx:id="gyroXButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="buttonClass" text="GyroX" GridPane.rowIndex="3" />
+                  <Button fx:id="gyroYButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="buttonClass" text="GyroY" GridPane.rowIndex="4" />
+                  <Button fx:id="gyroZButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="buttonClass" text="GyroZ" GridPane.rowIndex="5" />
+                  <Button fx:id="accYButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="buttonClass" text="AccY" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
    </children>
 </GridPane>

@@ -190,4 +190,30 @@ public class ExtremeData {
         tmp.getDataMax().setGyroZ(Math.ceil(dataMax.getGyroZ()));
         return tmp;
     }
+
+    public double getDataMax(int i)
+    {
+        return switch (i) {
+            case 0 -> dataMax.accX;
+            case 1 -> dataMax.accY;
+            case 2 -> dataMax.accZ;
+            case 3 -> dataMax.gyroX;
+            case 4 -> dataMax.gyroY;
+            case 5 -> dataMax.gyroZ;
+            default -> dataMax.accX;
+        };
+    }
+
+    public double getDataMin(int i)
+    {
+        return switch (i) {
+            case 0 -> dataMin.accX;
+            case 1 -> dataMin.accY;
+            case 2 -> dataMin.accZ;
+            case 3 -> dataMin.gyroX;
+            case 4 -> dataMin.gyroY;
+            case 5 -> dataMin.gyroZ;
+            default -> dataMin.accX;
+        };
+    }
 }

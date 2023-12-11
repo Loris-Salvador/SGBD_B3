@@ -1,11 +1,17 @@
-.chart-series-line.aggressive {
-    -fx-stroke: blue;
+.buttonClass {
+    -fx-background-color: transparent;
+}
+.buttonClass:hover {
+    -fx-background-color: #A5A5A5;
+}
+.buttonClass:disabled {
+    -fx-background-color: #656565;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #000000;
+
 }
 
-.chart-series-line.serie {
-    -fx-stroke: green;
-}
-
-.chart-series-line.lent {
-    -fx-stroke: red;
+#echelleLabel {
+    -fx-font-size: 20;
+    -fx-font-weight: bold; /* Utilisation du poids de police "bold" pour mettre en gras */
 }
