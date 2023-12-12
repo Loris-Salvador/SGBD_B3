@@ -248,18 +248,17 @@ public class Ords implements DataCarRepository{
 
 
     private String executeGetRequest(String urlRequest) throws GetDataException {
+        HttpURLConnection conn = null;
 
         try {
-        URL url = new URL(urlRequest);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            URL url = new URL(urlRequest);
+            conn = (HttpURLConnection) url.openConnection();
 
-        conn.setRequestMethod("GET");
-
+            conn.setRequestMethod("GET");
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String line;
-
 
             while ((line = reader.readLine()) != null) {
                 response.append(line);
@@ -272,8 +271,17 @@ public class Ords implements DataCarRepository{
         }
         catch (IOException e)
         {
+            if(conn != null)
+                conn.disconnect();
+
+
             throw new GetDataException("Erreur recuperation donnees");
         }
+        finally {
+            if(conn != null)
+                conn.disconnect();
+        }
+
 
     }
 }

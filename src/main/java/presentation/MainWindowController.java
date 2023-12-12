@@ -7,16 +7,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import presentation.accident.AccidentController;
 import presentation.analyse.AnalyseController;
+import presentation.analyse.AnalyseViewLoader;
 import presentation.analyse.LoadingController;
 
 import javax.swing.*;
 import java.io.IOException;
 
-public class MainWindowController {
+public class MainWindowController implements AnalyseViewLoader {
 
     @FXML
     private BorderPane mainPane;
@@ -27,7 +27,6 @@ public class MainWindowController {
     private Pane accidentView;
     private Pane analyseView;
     private final AppModule module;
-    private boolean isAnalyseView;
 
     public MainWindowController(AppModule module)
     {
@@ -39,8 +38,9 @@ public class MainWindowController {
         accidentButton.setOnAction(event -> clickOnAccidentButton());
         analyseButton.setOnAction(event -> clickOnAnalyseButton());
 
+
         initializeAccidentView();
-        initializeAnalyseView();
+        loadLoadingView();
 
         mainPane.setCenter(accidentView);
     }
@@ -52,9 +52,11 @@ public class MainWindowController {
     }
 
     private void clickOnAnalyseButton() {
+
         mainPane.setCenter(analyseView);
         accidentButton.setDisable(false);
         analyseButton.setDisable(true);
+
     }
 
     private void initializeAccidentView() {
@@ -73,11 +75,13 @@ public class MainWindowController {
         }
     }
 
-    private void initializeAnalyseView(){
+    private void loadLoadingView(){
+
+        LoadingController loadingController = new LoadingController(this);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("loading-view.fxml"));
-            loader.setController(new LoadingController());
+            loader.setController(loadingController);
             analyseView = loader.load();
         }
         catch (IOException e)
@@ -86,28 +90,30 @@ public class MainWindowController {
             JOptionPane.showMessageDialog(null, "Erreur lors du chargement de l'application", "Erreur", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
+    }
 
+    @Override
+    public void loadanalyseView() throws GetDataException {
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("analyse-view.fxml"));
+            module.getAnalyseUseCase().getBarChartData();
+            loader.setController(new AnalyseController(module.getAnalyseUseCase()));
+            analyseView = loader.load();
 
-        new Thread(() -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("analyse-view.fxml"));
-                module.getAnalyseUseCase().getBarChartData();
-                loader.setController(new AnalyseController(module.getAnalyseUseCase()));
-                analyseView = loader.load();
+            analyseView.getStylesheets().add("style/analyse-view-style.css");
 
-                analyseView.getStylesheets().add("style/analyse-view-style.css");
-
-                Platform.runLater(() -> {
-                    if(analyseButton.isDisable() == true)
-                        mainPane.setCenter(analyseView);
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Erreur lors du chargement de l'application", "Erreur", JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
-            }
-        }).start();
+            Platform.runLater(() -> {
+                if (analyseButton.isDisable() == true)
+                    mainPane.setCenter(analyseView);
+            });
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erreur lors du chargement analyse view", "Erreur", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
     }
 
 }
